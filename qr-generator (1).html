@@ -1,0 +1,1661 @@
+<!DOCTYPE html>
+<html lang="es" data-theme="dark">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>QR Studio Pro — Generador de Códigos QR Profesional Gratis</title>
+  <meta name="description" content="Genera códigos QR profesionales gratis: URL, WiFi, vCard, WhatsApp, SMS, Email, Cripto y más. Escanea, personaliza y descarga en PNG, SVG o PDF." />
+  <meta name="keywords" content="generador qr, código qr gratis, qr wifi, qr whatsapp, qr vcard, escanear qr, qr profesional" />
+
+  <!-- Bootstrap 5 -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet" />
+  <!-- FontAwesome -->
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet" />
+  <!-- Google Fonts -->
+  <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet" />
+
+  <style>
+    :root {
+      --bg: #080b14;
+      --bg2: #0d1120;
+      --surface: #111827;
+      --surface2: #1a2235;
+      --surface3: #222f45;
+      --border: rgba(99,179,237,0.1);
+      --border2: rgba(99,179,237,0.2);
+      --accent: #38bdf8;
+      --accent2: #0ea5e9;
+      --accent3: #7dd3fc;
+      --gold: #f59e0b;
+      --green: #10b981;
+      --red: #f43f5e;
+      --purple: #a78bfa;
+      --text: #e2e8f0;
+      --text2: #94a3b8;
+      --text3: #64748b;
+      --glow: rgba(56,189,248,0.15);
+      --radius: 16px;
+      --radius-sm: 10px;
+      --font-head: 'Syne', sans-serif;
+      --font-body: 'DM Sans', sans-serif;
+    }
+    [data-theme="light"] {
+      --bg: #f0f4f8;
+      --bg2: #e2e8f0;
+      --surface: #ffffff;
+      --surface2: #f8fafc;
+      --surface3: #f1f5f9;
+      --border: rgba(14,165,233,0.15);
+      --border2: rgba(14,165,233,0.3);
+      --text: #0f172a;
+      --text2: #475569;
+      --text3: #94a3b8;
+      --glow: rgba(14,165,233,0.08);
+    }
+
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; }
+    body {
+      font-family: var(--font-body);
+      background: var(--bg);
+      color: var(--text);
+      min-height: 100vh;
+      transition: background 0.3s, color 0.3s;
+    }
+
+    /* ── NOISE TEXTURE ── */
+    body::before {
+      content: '';
+      position: fixed; inset: 0; z-index: 0;
+      opacity: 0.025;
+      background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)'/%3E%3C/svg%3E");
+      pointer-events: none;
+    }
+
+    /* ── NAV ── */
+    .topnav {
+      position: sticky; top: 0; z-index: 100;
+      background: rgba(8,11,20,0.85);
+      backdrop-filter: blur(20px);
+      border-bottom: 1px solid var(--border);
+      padding: 0.75rem 0;
+    }
+    [data-theme="light"] .topnav { background: rgba(240,244,248,0.9); }
+    .brand { font-family: var(--font-head); font-size: 1.35rem; font-weight: 800; color: var(--accent); letter-spacing: -0.03em; }
+    .brand span { color: var(--text); }
+
+    .theme-toggle {
+      background: var(--surface2); border: 1px solid var(--border2);
+      border-radius: 40px; padding: 6px 14px; cursor: pointer; color: var(--text2);
+      font-size: 0.85rem; transition: all 0.2s; display: flex; align-items: center; gap: 6px;
+    }
+    .theme-toggle:hover { border-color: var(--accent); color: var(--accent); }
+
+    /* ── AD ZONES ── */
+    .ad-zone {
+      border: 2px dashed var(--border2);
+      border-radius: var(--radius-sm);
+      display: flex; align-items: center; justify-content: center;
+      color: var(--text3); font-size: 0.78rem; font-weight: 500; letter-spacing: 0.05em;
+      text-transform: uppercase; gap: 6px;
+      background: repeating-linear-gradient(-45deg, transparent, transparent 6px, rgba(99,179,237,0.02) 6px, rgba(99,179,237,0.02) 12px);
+    }
+    .ad-header { height: 90px; width: 100%; margin: 0.75rem 0; }
+    .ad-sidebar { height: 250px; width: 100%; margin-bottom: 1rem; }
+    .ad-inline { height: 90px; width: 100%; margin: 1rem 0; }
+
+    /* ── HERO ── */
+    .hero {
+      background: linear-gradient(135deg, var(--bg2) 0%, var(--surface) 100%);
+      border-bottom: 1px solid var(--border);
+      padding: 2.5rem 0 2rem;
+      position: relative; overflow: hidden;
+    }
+    .hero::after {
+      content: '';
+      position: absolute; top: -80px; right: -80px;
+      width: 350px; height: 350px; border-radius: 50%;
+      background: radial-gradient(circle, rgba(56,189,248,0.1) 0%, transparent 70%);
+      pointer-events: none;
+    }
+    .hero h1 { font-family: var(--font-head); font-size: clamp(1.8rem, 4vw, 2.8rem); font-weight: 800; letter-spacing: -0.04em; line-height: 1.1; }
+    .hero h1 .hl { color: var(--accent); }
+    .hero p { color: var(--text2); font-size: 1.05rem; margin-top: 0.5rem; }
+    .badge-pill { display: inline-flex; align-items: center; gap: 5px; background: rgba(56,189,248,0.1); border: 1px solid rgba(56,189,248,0.25); border-radius: 40px; padding: 4px 12px; font-size: 0.75rem; font-weight: 600; color: var(--accent3); margin-bottom: 1rem; }
+
+    /* ── CARDS ── */
+    .panel {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 1.5rem;
+      position: relative;
+    }
+    .panel-title {
+      font-family: var(--font-head); font-size: 0.8rem; font-weight: 700;
+      text-transform: uppercase; letter-spacing: 0.1em; color: var(--accent);
+      margin-bottom: 1rem; display: flex; align-items: center; gap: 8px;
+    }
+
+    /* ── TYPE SELECTOR ── */
+    .type-grid {
+      display: grid; grid-template-columns: repeat(auto-fill, minmax(80px, 1fr)); gap: 8px;
+    }
+    .type-btn {
+      border: 1.5px solid var(--border); border-radius: var(--radius-sm);
+      background: var(--surface2); padding: 10px 6px; cursor: pointer;
+      text-align: center; transition: all 0.2s; color: var(--text2); font-size: 0.72rem; font-weight: 500;
+    }
+    .type-btn i { display: block; font-size: 1.3rem; margin-bottom: 4px; }
+    .type-btn:hover { border-color: var(--accent); color: var(--accent); background: rgba(56,189,248,0.05); }
+    .type-btn.active { border-color: var(--accent); color: var(--accent); background: rgba(56,189,248,0.1); box-shadow: 0 0 0 3px rgba(56,189,248,0.1); }
+
+    /* ── FORM ── */
+    .form-label { font-size: 0.8rem; font-weight: 500; color: var(--text2); margin-bottom: 4px; }
+    .form-control, .form-select {
+      background: var(--surface2) !important; border: 1.5px solid var(--border) !important;
+      border-radius: var(--radius-sm) !important; color: var(--text) !important;
+      font-family: var(--font-body) !important; font-size: 0.92rem !important;
+      padding: 10px 14px !important; transition: border-color 0.2s, box-shadow 0.2s !important;
+    }
+    .form-control:focus, .form-select:focus {
+      border-color: var(--accent) !important;
+      box-shadow: 0 0 0 3px rgba(56,189,248,0.12) !important;
+      outline: none !important;
+    }
+    .form-control::placeholder { color: var(--text3) !important; }
+
+    /* ── QR FIELDS ── */
+    .qr-fields { display: none; }
+    .qr-fields.active { display: block; }
+
+    /* ── COLOR PICKERS ── */
+    .color-row { display: flex; gap: 8px; }
+    .color-item { flex: 1; }
+    .color-preview {
+      width: 36px; height: 36px; border-radius: 8px; border: 2px solid var(--border2);
+      cursor: pointer; overflow: hidden; position: relative;
+    }
+    .color-preview input[type="color"] {
+      position: absolute; inset: 0; width: 130%; height: 130%;
+      top: -15%; left: -15%; opacity: 0; cursor: pointer;
+    }
+    .color-display { display: flex; align-items: center; gap: 8px; background: var(--surface2); border: 1.5px solid var(--border); border-radius: var(--radius-sm); padding: 8px 12px; }
+    .color-hex { font-size: 0.82rem; color: var(--text2); font-family: monospace; }
+
+    /* ── SLIDER ── */
+    .range-wrap { position: relative; }
+    input[type="range"] {
+      width: 100%; accent-color: var(--accent); height: 4px;
+      background: var(--surface3); border-radius: 4px; outline: none; border: none;
+      -webkit-appearance: none; cursor: pointer;
+    }
+    input[type="range"]::-webkit-slider-thumb {
+      -webkit-appearance: none; width: 18px; height: 18px;
+      border-radius: 50%; background: var(--accent); cursor: pointer;
+      box-shadow: 0 0 0 3px rgba(56,189,248,0.2);
+    }
+    .range-val { font-size: 0.8rem; font-weight: 600; color: var(--accent); }
+
+    /* ── BUTTONS ── */
+    .btn-gen {
+      background: linear-gradient(135deg, var(--accent2), var(--accent));
+      border: none; border-radius: var(--radius-sm); color: #0a0a12;
+      font-family: var(--font-head); font-size: 1rem; font-weight: 700;
+      padding: 13px 24px; width: 100%; cursor: pointer; letter-spacing: -0.01em;
+      transition: all 0.2s; box-shadow: 0 4px 20px rgba(56,189,248,0.3);
+    }
+    .btn-gen:hover { transform: translateY(-2px); box-shadow: 0 8px 30px rgba(56,189,248,0.4); }
+    .btn-gen:active { transform: translateY(0); }
+    .btn-gen i { margin-right: 8px; }
+
+    .btn-dl {
+      background: var(--surface2); border: 1.5px solid var(--border2);
+      border-radius: var(--radius-sm); color: var(--text2);
+      font-size: 0.85rem; font-weight: 600; padding: 9px 14px;
+      cursor: pointer; transition: all 0.2s; display: flex; align-items: center; gap: 6px;
+      white-space: nowrap;
+    }
+    .btn-dl:hover { border-color: var(--accent); color: var(--accent); background: rgba(56,189,248,0.05); }
+    .btn-dl.primary-dl { background: var(--accent2); border-color: var(--accent2); color: #0a0a12; font-weight: 700; }
+    .btn-dl.primary-dl:hover { background: var(--accent); border-color: var(--accent); }
+
+    /* ── QR PREVIEW ── */
+    .qr-stage {
+      display: flex; align-items: center; justify-content: center;
+      min-height: 280px; position: relative;
+    }
+    .qr-wrapper {
+      background: white; border-radius: 16px; padding: 16px;
+      box-shadow: 0 8px 40px rgba(0,0,0,0.3);
+      display: inline-flex; align-items: center; justify-content: center;
+    }
+    .qr-placeholder {
+      width: 240px; height: 240px; border: 2px dashed var(--border2);
+      border-radius: 12px; display: flex; flex-direction: column;
+      align-items: center; justify-content: center; gap: 12px;
+      color: var(--text3);
+    }
+    .qr-placeholder i { font-size: 3rem; opacity: 0.4; }
+    .qr-placeholder p { font-size: 0.82rem; text-align: center; opacity: 0.6; }
+
+    /* ── HISTORY ── */
+    .hist-item {
+      display: flex; align-items: center; gap: 10px;
+      background: var(--surface2); border: 1px solid var(--border);
+      border-radius: var(--radius-sm); padding: 8px 12px; cursor: pointer;
+      transition: all 0.2s; margin-bottom: 6px;
+    }
+    .hist-item:hover { border-color: var(--accent); }
+    .hist-thumb { width: 36px; height: 36px; border-radius: 6px; background: white; display: flex; align-items: center; justify-content: center; overflow: hidden; flex-shrink: 0; }
+    .hist-thumb img { width: 100%; height: 100%; object-fit: contain; }
+    .hist-text { flex: 1; min-width: 0; }
+    .hist-label { font-size: 0.78rem; font-weight: 600; color: var(--text); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+    .hist-type { font-size: 0.7rem; color: var(--text3); }
+
+    /* ── SCANNER ── */
+    #qr-reader { border-radius: var(--radius-sm); overflow: hidden; border: 1px solid var(--border); }
+    #qr-reader * { font-family: var(--font-body) !important; }
+    .scan-result { background: var(--surface2); border: 1px solid var(--green); border-radius: var(--radius-sm); padding: 12px 16px; margin-top: 1rem; word-break: break-all; font-size: 0.88rem; display: none; }
+    .scan-result.visible { display: block; }
+
+    /* ── MASS GENERATOR ── */
+    .mass-item-card {
+      background: var(--surface2); border: 1px solid var(--border);
+      border-radius: var(--radius-sm); padding: 10px;
+      display: flex; align-items: center; gap: 10px;
+    }
+    .mass-qr-thumb { width: 60px; height: 60px; background: white; border-radius: 6px; display: flex; align-items: center; justify-content: center; overflow: hidden; flex-shrink: 0; }
+
+    /* ── TABS ── */
+    .nav-tabs { border-bottom: 1px solid var(--border); gap: 4px; }
+    .nav-tabs .nav-link {
+      border: none !important; border-radius: var(--radius-sm) var(--radius-sm) 0 0 !important;
+      color: var(--text2) !important; font-size: 0.82rem; font-weight: 500; padding: 8px 16px;
+      background: transparent !important;
+    }
+    .nav-tabs .nav-link.active { background: var(--surface2) !important; color: var(--accent) !important; border-bottom: 2px solid var(--accent) !important; }
+    .nav-tabs .nav-link:hover:not(.active) { color: var(--text) !important; }
+    .tab-content { padding-top: 1rem; }
+
+    /* ── FILE UPLOAD ── */
+    .drop-zone {
+      border: 2px dashed var(--border2); border-radius: var(--radius);
+      padding: 2.5rem; text-align: center; cursor: pointer;
+      transition: all 0.2s; color: var(--text2);
+    }
+    .drop-zone:hover, .drop-zone.drag-over { border-color: var(--accent); background: rgba(56,189,248,0.05); color: var(--accent); }
+    .drop-zone i { font-size: 2.5rem; margin-bottom: 0.75rem; display: block; }
+    .drop-zone small { display: block; color: var(--text3); font-size: 0.75rem; margin-top: 0.3rem; }
+
+    /* ── FAQ ── */
+    .accordion-item { background: var(--surface) !important; border: 1px solid var(--border) !important; border-radius: var(--radius-sm) !important; margin-bottom: 8px !important; overflow: hidden; }
+    .accordion-button { background: var(--surface2) !important; color: var(--text) !important; font-family: var(--font-body) !important; font-size: 0.95rem !important; font-weight: 500 !important; box-shadow: none !important; }
+    .accordion-button:not(.collapsed) { color: var(--accent) !important; background: rgba(56,189,248,0.05) !important; }
+    .accordion-button::after { filter: invert(1) sepia(1) saturate(5) hue-rotate(175deg); }
+    .accordion-body { background: var(--surface) !important; color: var(--text2) !important; font-size: 0.9rem; line-height: 1.7; }
+
+    /* ── FOOTER ── */
+    footer { background: var(--bg2); border-top: 1px solid var(--border); padding: 2.5rem 0 1.5rem; margin-top: 3rem; }
+    footer .footer-brand { font-family: var(--font-head); font-size: 1.2rem; font-weight: 800; color: var(--accent); }
+    footer p { color: var(--text3); font-size: 0.82rem; line-height: 1.7; }
+    footer a { color: var(--text2); text-decoration: none; font-size: 0.82rem; transition: color 0.2s; }
+    footer a:hover { color: var(--accent); }
+
+    /* ── TOAST ── */
+    .toast-container { position: fixed; bottom: 1.5rem; right: 1.5rem; z-index: 9999; }
+    .my-toast {
+      background: var(--surface); border: 1px solid var(--border2);
+      border-radius: var(--radius-sm); padding: 12px 20px;
+      color: var(--text); font-size: 0.88rem; box-shadow: 0 8px 30px rgba(0,0,0,0.3);
+      display: flex; align-items: center; gap: 10px;
+      animation: toastIn 0.3s ease; min-width: 220px;
+    }
+    .my-toast.success { border-color: var(--green); }
+    .my-toast.error { border-color: var(--red); }
+    @keyframes toastIn { from { opacity: 0; transform: translateY(12px); } to { opacity: 1; transform: translateY(0); } }
+
+    /* ── UTILS ── */
+    .section-title { font-family: var(--font-head); font-size: 1.5rem; font-weight: 800; letter-spacing: -0.03em; margin-bottom: 0.25rem; }
+    .section-sub { color: var(--text2); font-size: 0.9rem; margin-bottom: 1.5rem; }
+    .divider { border-color: var(--border) !important; }
+    .tag { display: inline-flex; align-items: center; gap: 4px; background: rgba(56,189,248,0.1); border: 1px solid rgba(56,189,248,0.2); border-radius: 6px; padding: 2px 8px; font-size: 0.72rem; font-weight: 600; color: var(--accent3); }
+    .stat-badge { background: var(--surface2); border: 1px solid var(--border); border-radius: 12px; padding: 12px 16px; text-align: center; }
+    .stat-badge .num { font-family: var(--font-head); font-size: 1.6rem; font-weight: 800; color: var(--accent); }
+    .stat-badge .lbl { font-size: 0.72rem; color: var(--text3); text-transform: uppercase; letter-spacing: 0.06em; }
+    .result-badge { display: inline-flex; align-items: center; gap: 5px; background: rgba(16,185,129,0.1); border: 1px solid rgba(16,185,129,0.25); border-radius: 40px; padding: 4px 12px; font-size: 0.75rem; font-weight: 600; color: var(--green); }
+    .dot-pulse { width: 6px; height: 6px; border-radius: 50%; background: var(--green); animation: pulse 1.5s infinite; }
+    @keyframes pulse { 0%,100%{opacity:1} 50%{opacity:0.3} }
+
+    @media (max-width: 768px) {
+      .type-grid { grid-template-columns: repeat(3, 1fr); }
+      .hero { padding: 1.5rem 0 1rem; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- ═══ TOPNAV ═══ -->
+<nav class="topnav">
+  <div class="container">
+    <div class="d-flex align-items-center justify-content-between">
+      <div class="brand">QR <span>Studio Pro</span></div>
+      <div class="d-flex align-items-center gap-3">
+        <button class="theme-toggle" onclick="toggleTheme()">
+          <i class="fa-solid fa-moon" id="themeIcon"></i>
+          <span id="themeLabel">Claro</span>
+        </button>
+      </div>
+    </div>
+  </div>
+</nav>
+
+<!-- ═══ AD HEADER ═══ -->
+<div class="container">
+  <div class="ad-zone ad-header">
+    <i class="fa-regular fa-rectangle-ad"></i> ANUNCIO AQUÍ — 728×90 Leaderboard
+  </div>
+</div>
+
+<!-- ═══ HERO ═══ -->
+<section class="hero">
+  <div class="container">
+    <div class="badge-pill"><i class="fa-solid fa-bolt"></i> 100% Gratis · Sin Registro · Sin Límites</div>
+    <h1>Generador de <span class="hl">Códigos QR</span><br>Profesional</h1>
+    <p>URL, WiFi, WhatsApp, vCard, Email, SMS, Cripto y más. Descarga en PNG, SVG o PDF.</p>
+    <div class="row g-2 mt-2">
+      <div class="col-auto"><div class="stat-badge"><div class="num">9+</div><div class="lbl">Tipos de QR</div></div></div>
+      <div class="col-auto"><div class="stat-badge"><div class="num">3</div><div class="lbl">Formatos Export</div></div></div>
+      <div class="col-auto"><div class="stat-badge"><div class="num">∞</div><div class="lbl">Permanentes</div></div></div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══ MAIN CONTENT ═══ -->
+<div class="container py-4">
+  <div class="row g-4">
+
+    <!-- ══ LEFT: GENERATOR ══ -->
+    <div class="col-lg-8">
+
+      <!-- Tabs: Generar / Escanear / Masivo / Archivo -->
+      <ul class="nav nav-tabs mb-0" id="mainTabs">
+        <li class="nav-item"><button class="nav-link active" data-bs-toggle="tab" data-bs-target="#tabGen"><i class="fa-solid fa-qrcode me-1"></i>Generar</button></li>
+        <li class="nav-item"><button class="nav-link" data-bs-toggle="tab" data-bs-target="#tabScan"><i class="fa-solid fa-camera me-1"></i>Escanear</button></li>
+        <li class="nav-item"><button class="nav-link" data-bs-toggle="tab" data-bs-target="#tabMass"><i class="fa-solid fa-layer-group me-1"></i>Masivo</button></li>
+        <li class="nav-item"><button class="nav-link" data-bs-toggle="tab" data-bs-target="#tabFile"><i class="fa-solid fa-cloud-arrow-up me-1"></i>Archivo</button></li>
+      </ul>
+
+      <div class="tab-content" id="mainTabsContent">
+
+        <!-- ── TAB: GENERAR ── -->
+        <div class="tab-pane fade show active" id="tabGen">
+          <div class="panel mb-3">
+            <div class="panel-title"><i class="fa-solid fa-grid-2"></i> Tipo de código QR</div>
+            <div class="type-grid" id="typeGrid">
+              <div class="type-btn active" data-type="url" onclick="setType('url',this)"><i class="fa-solid fa-link"></i>URL</div>
+              <div class="type-btn" data-type="text" onclick="setType('text',this)"><i class="fa-solid fa-font"></i>Texto</div>
+              <div class="type-btn" data-type="wifi" onclick="setType('wifi',this)"><i class="fa-solid fa-wifi"></i>Wi-Fi</div>
+              <div class="type-btn" data-type="vcard" onclick="setType('vcard',this)"><i class="fa-solid fa-address-card"></i>vCard</div>
+              <div class="type-btn" data-type="email" onclick="setType('email',this)"><i class="fa-solid fa-envelope"></i>Email</div>
+              <div class="type-btn" data-type="sms" onclick="setType('sms',this)"><i class="fa-solid fa-comment-sms"></i>SMS</div>
+              <div class="type-btn" data-type="whatsapp" onclick="setType('whatsapp',this)"><i class="fa-brands fa-whatsapp"></i>WhatsApp</div>
+              <div class="type-btn" data-type="event" onclick="setType('event',this)"><i class="fa-solid fa-calendar-plus"></i>Evento</div>
+              <div class="type-btn" data-type="crypto" onclick="setType('crypto',this)"><i class="fa-brands fa-bitcoin"></i>Cripto</div>
+            </div>
+          </div>
+
+          <div class="panel mb-3">
+            <div class="panel-title"><i class="fa-solid fa-pen-to-square"></i> Contenido</div>
+
+            <!-- URL -->
+            <div class="qr-fields active" id="fields-url">
+              <label class="form-label">Enlace (URL)</label>
+              <input type="url" class="form-control" id="f-url" placeholder="https://ejemplo.com" />
+            </div>
+
+            <!-- TEXT -->
+            <div class="qr-fields" id="fields-text">
+              <label class="form-label">Texto libre</label>
+              <textarea class="form-control" id="f-text" rows="3" placeholder="Escribe cualquier texto..."></textarea>
+            </div>
+
+            <!-- WIFI -->
+            <div class="qr-fields" id="fields-wifi">
+              <div class="row g-2">
+                <div class="col-md-6">
+                  <label class="form-label">SSID (Nombre de red)</label>
+                  <input class="form-control" id="f-wifi-ssid" placeholder="MiRedWifi" />
+                </div>
+                <div class="col-md-6">
+                  <label class="form-label">Contraseña</label>
+                  <input class="form-control" id="f-wifi-pass" type="password" placeholder="••••••••" />
+                </div>
+                <div class="col-12">
+                  <label class="form-label">Seguridad</label>
+                  <select class="form-select" id="f-wifi-sec">
+                    <option value="WPA">WPA/WPA2</option>
+                    <option value="WEP">WEP</option>
+                    <option value="">Sin contraseña</option>
+                  </select>
+                </div>
+              </div>
+            </div>
+
+            <!-- VCARD -->
+            <div class="qr-fields" id="fields-vcard">
+              <div class="row g-2">
+                <div class="col-md-6"><label class="form-label">Nombre</label><input class="form-control" id="f-vc-name" placeholder="Juan García" /></div>
+                <div class="col-md-6"><label class="form-label">Teléfono</label><input class="form-control" id="f-vc-tel" placeholder="+507 6000-0000" /></div>
+                <div class="col-md-6"><label class="form-label">Email</label><input class="form-control" id="f-vc-email" placeholder="juan@empresa.com" /></div>
+                <div class="col-md-6"><label class="form-label">Empresa</label><input class="form-control" id="f-vc-org" placeholder="Mi Empresa" /></div>
+                <div class="col-12"><label class="form-label">Sitio web</label><input class="form-control" id="f-vc-url" placeholder="https://empresa.com" /></div>
+              </div>
+            </div>
+
+            <!-- EMAIL -->
+            <div class="qr-fields" id="fields-email">
+              <div class="row g-2">
+                <div class="col-12"><label class="form-label">Destinatario</label><input class="form-control" id="f-em-to" placeholder="contacto@email.com" /></div>
+                <div class="col-12"><label class="form-label">Asunto</label><input class="form-control" id="f-em-sub" placeholder="Hola! Te escribo desde..." /></div>
+                <div class="col-12"><label class="form-label">Mensaje</label><textarea class="form-control" id="f-em-body" rows="2" placeholder="Cuerpo del email..."></textarea></div>
+              </div>
+            </div>
+
+            <!-- SMS -->
+            <div class="qr-fields" id="fields-sms">
+              <div class="row g-2">
+                <div class="col-md-5"><label class="form-label">Número</label><input class="form-control" id="f-sms-num" placeholder="+50760000000" /></div>
+                <div class="col-md-7"><label class="form-label">Mensaje</label><input class="form-control" id="f-sms-msg" placeholder="Hola! Escanee este QR..." /></div>
+              </div>
+            </div>
+
+            <!-- WHATSAPP -->
+            <div class="qr-fields" id="fields-whatsapp">
+              <div class="row g-2">
+                <div class="col-md-5"><label class="form-label">Número (con código país)</label><input class="form-control" id="f-wa-num" placeholder="50760000000" /></div>
+                <div class="col-md-7"><label class="form-label">Mensaje predefinido</label><input class="form-control" id="f-wa-msg" placeholder="Hola! Escanee..." /></div>
+              </div>
+            </div>
+
+            <!-- EVENT -->
+            <div class="qr-fields" id="fields-event">
+              <div class="row g-2">
+                <div class="col-12"><label class="form-label">Nombre del evento</label><input class="form-control" id="f-ev-name" placeholder="Conferencia 2025" /></div>
+                <div class="col-md-6"><label class="form-label">Inicio</label><input class="form-control" type="datetime-local" id="f-ev-start" /></div>
+                <div class="col-md-6"><label class="form-label">Fin</label><input class="form-control" type="datetime-local" id="f-ev-end" /></div>
+                <div class="col-12"><label class="form-label">Ubicación</label><input class="form-control" id="f-ev-loc" placeholder="Ciudad de Panamá, Panamá" /></div>
+              </div>
+            </div>
+
+            <!-- CRYPTO -->
+            <div class="qr-fields" id="fields-crypto">
+              <div class="row g-2">
+                <div class="col-md-4">
+                  <label class="form-label">Criptomoneda</label>
+                  <select class="form-select" id="f-cr-coin">
+                    <option value="bitcoin">Bitcoin (BTC)</option>
+                    <option value="ethereum">Ethereum (ETH)</option>
+                    <option value="litecoin">Litecoin (LTC)</option>
+                  </select>
+                </div>
+                <div class="col-md-8"><label class="form-label">Dirección de wallet</label><input class="form-control" id="f-cr-addr" placeholder="bc1q..." /></div>
+                <div class="col-md-6"><label class="form-label">Monto (opcional)</label><input class="form-control" id="f-cr-amt" type="number" step="0.0001" placeholder="0.001" /></div>
+              </div>
+            </div>
+          </div>
+
+          <!-- AD INLINE -->
+          <div class="ad-zone ad-inline">
+            <i class="fa-regular fa-rectangle-ad"></i> ANUNCIO AQUÍ — 728×90 Debajo del formulario
+          </div>
+
+          <!-- Personalización -->
+          <div class="panel mb-3">
+            <div class="panel-title"><i class="fa-solid fa-sliders"></i> Personalización avanzada</div>
+            <div class="row g-3">
+              <div class="col-md-6">
+                <label class="form-label">Color del QR</label>
+                <div class="color-display" onclick="document.getElementById('qrColorPick').click()" style="cursor:pointer">
+                  <div class="color-preview" id="qrColorBox" style="background:#000000">
+                    <input type="color" id="qrColorPick" value="#000000" oninput="updateColor('qr',this.value)" />
+                  </div>
+                  <span class="color-hex" id="qrColorHex">#000000</span>
+                </div>
+              </div>
+              <div class="col-md-6">
+                <label class="form-label">Color de fondo</label>
+                <div class="color-display" onclick="document.getElementById('bgColorPick').click()" style="cursor:pointer">
+                  <div class="color-preview" id="bgColorBox" style="background:#ffffff">
+                    <input type="color" id="bgColorPick" value="#ffffff" oninput="updateColor('bg',this.value)" />
+                  </div>
+                  <span class="color-hex" id="bgColorHex">#ffffff</span>
+                </div>
+              </div>
+              <div class="col-md-4">
+                <label class="form-label d-flex justify-content-between">Tamaño <span class="range-val" id="sizeVal">280px</span></label>
+                <input type="range" id="qrSize" min="128" max="512" step="8" value="280" oninput="document.getElementById('sizeVal').textContent=this.value+'px'" />
+              </div>
+              <div class="col-md-4">
+                <label class="form-label d-flex justify-content-between">Margen <span class="range-val" id="marginVal">2</span></label>
+                <input type="range" id="qrMargin" min="0" max="8" step="1" value="2" oninput="document.getElementById('marginVal').textContent=this.value" />
+              </div>
+              <div class="col-md-4">
+                <label class="form-label">Corrección de error</label>
+                <select class="form-select" id="qrECC">
+                  <option value="L">L — 7%</option>
+                  <option value="M" selected>M — 15%</option>
+                  <option value="Q">Q — 25%</option>
+                  <option value="H">H — 30%</option>
+                </select>
+              </div>
+            </div>
+          </div>
+
+          <button class="btn-gen mb-3" onclick="generateQR()">
+            <i class="fa-solid fa-qrcode"></i> Generar Código QR
+          </button>
+
+          <!-- RESULT -->
+          <div class="panel" id="resultPanel" style="display:none">
+            <div class="d-flex align-items-center justify-content-between mb-3">
+              <div class="panel-title mb-0"><i class="fa-solid fa-circle-check"></i> Tu código QR</div>
+              <span class="result-badge"><span class="dot-pulse"></span> Permanente</span>
+            </div>
+            <div class="qr-stage mb-3">
+              <div class="qr-wrapper" id="qrContainer"></div>
+            </div>
+            <div class="bg-surface2 rounded p-2 mb-3" style="background:var(--surface2);border:1px solid var(--border);border-radius:var(--radius-sm);word-break:break-all;font-size:0.8rem;color:var(--text2);">
+              <span id="qrContentPreview"></span>
+            </div>
+            <div class="d-flex flex-wrap gap-2">
+              <button class="btn-dl primary-dl" onclick="downloadPNG()"><i class="fa-solid fa-image"></i> PNG</button>
+              <button class="btn-dl" onclick="downloadSVG()"><i class="fa-solid fa-bezier-curve"></i> SVG</button>
+              <button class="btn-dl" onclick="downloadPDF()"><i class="fa-solid fa-file-pdf"></i> PDF</button>
+              <button class="btn-dl ms-auto" onclick="copyContent()"><i class="fa-regular fa-copy"></i> Copiar enlace</button>
+            </div>
+          </div>
+        </div>
+
+        <!-- ── TAB: ESCANEAR ── -->
+        <div class="tab-pane fade" id="tabScan">
+          <div class="panel">
+            <div class="panel-title"><i class="fa-solid fa-camera"></i> Escanear código QR con cámara</div>
+            <p class="text-secondary mb-3" style="font-size:0.88rem">Apunta la cámara a cualquier código QR para leer su contenido al instante.</p>
+            <div id="qr-reader" style="width:100%"></div>
+            <div class="scan-result" id="scanResult">
+              <div class="d-flex align-items-center gap-2 mb-2">
+                <i class="fa-solid fa-circle-check" style="color:var(--green)"></i>
+                <strong>Resultado escaneado:</strong>
+              </div>
+              <span id="scanText" style="color:var(--accent3)"></span>
+              <div class="d-flex gap-2 mt-2">
+                <button class="btn-dl" onclick="openScanned()"><i class="fa-solid fa-arrow-up-right-from-square"></i> Abrir</button>
+                <button class="btn-dl" onclick="copyScanned()"><i class="fa-regular fa-copy"></i> Copiar</button>
+                <button class="btn-dl" onclick="genFromScanned()"><i class="fa-solid fa-qrcode"></i> Generar QR</button>
+              </div>
+            </div>
+            <button class="btn-gen mt-3" id="startScanBtn" onclick="startScanner()">
+              <i class="fa-solid fa-camera"></i> Iniciar cámara
+            </button>
+            <button class="btn-dl mt-2" id="stopScanBtn" onclick="stopScanner()" style="display:none;width:100%;justify-content:center">
+              <i class="fa-solid fa-stop"></i> Detener cámara
+            </button>
+          </div>
+        </div>
+
+        <!-- ── TAB: MASIVO ── -->
+        <div class="tab-pane fade" id="tabMass">
+          <div class="panel">
+            <div class="panel-title"><i class="fa-solid fa-layer-group"></i> Generador masivo de QR</div>
+            <p style="font-size:0.88rem;color:var(--text2)" class="mb-3">Pega una URL o texto por línea. Se generará un QR para cada línea.</p>
+            <textarea class="form-control mb-3" id="massInput" rows="6" placeholder="https://sitio1.com&#10;https://sitio2.com&#10;Mi texto personalizado&#10;https://sitio3.com"></textarea>
+            <button class="btn-gen mb-3" onclick="generateMass()"><i class="fa-solid fa-layer-group"></i> Generar todos los QR</button>
+            <div id="massResults" class="d-flex flex-column gap-2"></div>
+            <div class="d-flex gap-2 mt-3" id="massDownloadBtns" style="display:none!important">
+              <button class="btn-dl" onclick="downloadMassZip()"><i class="fa-solid fa-file-zipper"></i> Descargar todos (ZIP)</button>
+            </div>
+          </div>
+        </div>
+
+        <!-- ── TAB: ARCHIVO ── -->
+        <div class="tab-pane fade" id="tabFile">
+          <div class="panel mb-3">
+            <div class="panel-title"><i class="fa-brands fa-cloudflare"></i> Configuración de Cloudinary</div>
+            <p style="font-size:0.82rem;color:var(--text2);margin-bottom:1rem">Ingresa tus credenciales de Cloudinary para activar la subida real de archivos. Obtenlas en <a href="https://cloudinary.com/console" target="_blank" style="color:var(--accent)">cloudinary.com/console</a>.</p>
+            <div class="row g-2">
+              <div class="col-md-6">
+                <label class="form-label">Cloud Name <span style="color:var(--red)">*</span></label>
+                <input class="form-control" id="cld-cloud-name" placeholder="ej: mi-empresa-123" value="TU_CLOUD_NAME_AQUI" />
+              </div>
+              <div class="col-md-6">
+                <label class="form-label">Upload Preset <span style="color:var(--red)">*</span></label>
+                <input class="form-control" id="cld-preset" placeholder="ej: qr_unsigned_preset" value="qr-studio-uploads" />
+              </div>
+              <div class="col-12">
+                <div class="d-flex align-items-center gap-2 p-2 mt-1" style="background:rgba(245,158,11,0.08);border:1px solid rgba(245,158,11,0.25);border-radius:var(--radius-sm)">
+                  <i class="fa-solid fa-triangle-exclamation" style="color:var(--gold);flex-shrink:0"></i>
+                  <span style="font-size:0.77rem;color:var(--text2)">El <strong style="color:var(--gold)">Upload Preset</strong> debe ser de tipo <strong style="color:var(--gold)">Unsigned</strong> en tu panel de Cloudinary → Settings → Upload Presets.</span>
+                </div>
+              </div>
+              <div class="col-12">
+                <button class="btn-dl" onclick="saveCloudinaryConfig()" style="width:100%;justify-content:center">
+                  <i class="fa-solid fa-floppy-disk"></i> Guardar configuración
+                </button>
+              </div>
+            </div>
+            <div id="cldConfigStatus" style="display:none;margin-top:0.75rem"></div>
+          </div>
+
+          <div class="panel">
+            <div class="panel-title"><i class="fa-solid fa-cloud-arrow-up"></i> Subir archivo → generar QR</div>
+            <p style="font-size:0.88rem;color:var(--text2)" class="mb-3">Sube un PDF, imagen o MP3. Se sube a Cloudinary y recibes un QR con el enlace permanente de descarga.</p>
+
+            <div class="drop-zone" id="dropZone" onclick="document.getElementById('fileInput').click()" ondragover="handleDragOver(event)" ondragleave="handleDragLeave(event)" ondrop="handleDrop(event)">
+              <i class="fa-solid fa-cloud-arrow-up" style="color:var(--accent)"></i>
+              <strong>Haz clic o arrastra tu archivo aquí</strong>
+              <small>PDF, JPG, PNG, GIF, MP3 · Máx. 20MB</small>
+            </div>
+            <input type="file" id="fileInput" accept=".pdf,.jpg,.jpeg,.png,.gif,.mp3" style="display:none" onchange="handleFileSelect(this)" />
+
+            <div id="fileInfo" class="mt-3" style="display:none">
+              <div class="d-flex align-items-center gap-2 p-3" style="background:var(--surface2);border:1px solid var(--border);border-radius:var(--radius-sm)">
+                <i class="fa-solid fa-file fa-2x" id="fileIcon" style="color:var(--accent)"></i>
+                <div style="flex:1;min-width:0">
+                  <div style="font-weight:600;font-size:0.9rem;white-space:nowrap;overflow:hidden;text-overflow:ellipsis" id="fileName"></div>
+                  <div style="font-size:0.78rem;color:var(--text3)" id="fileSize"></div>
+                </div>
+                <button class="btn-dl" onclick="clearFile()" style="padding:6px 10px"><i class="fa-solid fa-xmark"></i></button>
+              </div>
+
+              <!-- PROGRESS BAR -->
+              <div id="uploadProgress" style="display:none;margin-top:0.75rem">
+                <div class="d-flex justify-content-between mb-1">
+                  <span style="font-size:0.78rem;color:var(--text2)" id="uploadStatusText">Subiendo...</span>
+                  <span style="font-size:0.78rem;font-weight:600;color:var(--accent)" id="uploadPct">0%</span>
+                </div>
+                <div style="background:var(--surface3);border-radius:4px;height:6px;overflow:hidden">
+                  <div id="progressBar" style="height:100%;background:linear-gradient(90deg,var(--accent2),var(--accent));border-radius:4px;width:0%;transition:width 0.3s"></div>
+                </div>
+              </div>
+
+              <!-- URL RESULTADO -->
+              <div id="uploadResult" style="display:none;margin-top:0.75rem">
+                <div class="d-flex align-items-center gap-2 p-2" style="background:rgba(16,185,129,0.08);border:1px solid rgba(16,185,129,0.25);border-radius:var(--radius-sm)">
+                  <i class="fa-solid fa-circle-check" style="color:var(--green)"></i>
+                  <span style="font-size:0.78rem;font-weight:600;color:var(--green)">¡Subido exitosamente!</span>
+                </div>
+                <div class="mt-2 p-2" style="background:var(--surface2);border:1px solid var(--border);border-radius:var(--radius-sm);word-break:break-all;font-size:0.78rem;color:var(--text2)">
+                  <span id="uploadedURL"></span>
+                </div>
+              </div>
+
+              <button class="btn-gen mt-3" id="uploadBtn" onclick="uploadToCloudinary()">
+                <i class="fa-solid fa-cloud-arrow-up"></i> Subir a Cloudinary y generar QR
+              </button>
+            </div>
+
+            <!-- GUÍA PASO A PASO -->
+            <div class="mt-4 p-3" style="background:var(--surface2);border:1px solid var(--border);border-radius:var(--radius-sm)">
+              <div class="panel-title" style="font-size:0.72rem;margin-bottom:0.75rem"><i class="fa-solid fa-list-ol"></i> Cómo obtener tus credenciales de Cloudinary</div>
+              <div class="d-flex flex-column gap-2" style="font-size:0.8rem;color:var(--text2)">
+                <div class="d-flex gap-2"><span style="background:var(--accent2);color:#0a0a12;border-radius:50%;width:20px;height:20px;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:0.7rem;flex-shrink:0">1</span><span>Crea cuenta gratis en <a href="https://cloudinary.com" target="_blank" style="color:var(--accent)">cloudinary.com</a> (plan gratuito: 25GB).</span></div>
+                <div class="d-flex gap-2"><span style="background:var(--accent2);color:#0a0a12;border-radius:50%;width:20px;height:20px;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:0.7rem;flex-shrink:0">2</span><span>En el Dashboard copia tu <strong style="color:var(--text)">Cloud Name</strong> (esquina superior).</span></div>
+                <div class="d-flex gap-2"><span style="background:var(--accent2);color:#0a0a12;border-radius:50%;width:20px;height:20px;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:0.7rem;flex-shrink:0">3</span><span>Ve a <strong style="color:var(--text)">Settings → Upload → Upload Presets</strong> y crea uno nuevo.</span></div>
+                <div class="d-flex gap-2"><span style="background:var(--accent2);color:#0a0a12;border-radius:50%;width:20px;height:20px;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:0.7rem;flex-shrink:0">4</span><span>En el preset, pon <strong style="color:var(--text)">Signing Mode = Unsigned</strong> y guarda. Copia el nombre del preset.</span></div>
+                <div class="d-flex gap-2"><span style="background:var(--accent2);color:#0a0a12;border-radius:50%;width:20px;height:20px;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:0.7rem;flex-shrink:0">5</span><span>Pega ambos valores arriba y haz clic en <strong style="color:var(--text)">Guardar configuración</strong>.</span></div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+      </div><!-- /tab-content -->
+    </div><!-- /col-left -->
+
+    <!-- ══ RIGHT SIDEBAR ══ -->
+    <div class="col-lg-4">
+
+      <!-- AD SIDEBAR -->
+      <div class="ad-zone ad-sidebar">
+        <i class="fa-regular fa-rectangle-ad"></i> ANUNCIO AQUÍ — 300×250 Sidebar
+      </div>
+
+      <!-- HISTORIAL -->
+      <div class="panel mb-3">
+        <div class="panel-title"><i class="fa-solid fa-clock-rotate-left"></i> Historial reciente</div>
+        <div id="historyList">
+          <p style="font-size:0.82rem;color:var(--text3);text-align:center;padding:1rem 0">Los últimos 5 QR aparecerán aquí</p>
+        </div>
+        <button class="btn-dl w-100 justify-content-center" onclick="clearHistory()" style="margin-top:0.5rem;font-size:0.78rem">
+          <i class="fa-solid fa-trash"></i> Borrar historial
+        </button>
+      </div>
+
+      <!-- QUICK TIPS -->
+      <div class="panel">
+        <div class="panel-title"><i class="fa-solid fa-lightbulb"></i> Consejos rápidos</div>
+        <div class="d-flex flex-column gap-2" style="font-size:0.82rem;color:var(--text2)">
+          <div class="d-flex gap-2"><i class="fa-solid fa-circle-check" style="color:var(--green);margin-top:2px;flex-shrink:0"></i><span>Usa nivel de corrección <strong>H</strong> si añadirás un logo sobre el QR.</span></div>
+          <div class="d-flex gap-2"><i class="fa-solid fa-circle-check" style="color:var(--green);margin-top:2px;flex-shrink:0"></i><span>El <strong>contraste</strong> entre colores es clave para que el QR sea legible.</span></div>
+          <div class="d-flex gap-2"><i class="fa-solid fa-circle-check" style="color:var(--green);margin-top:2px;flex-shrink:0"></i><span>Descarga en <strong>SVG</strong> para impresión en gran formato sin pérdida.</span></div>
+          <div class="d-flex gap-2"><i class="fa-solid fa-circle-check" style="color:var(--green);margin-top:2px;flex-shrink:0"></i><span>Los QR generados son <strong>permanentes</strong> — nunca expiran.</span></div>
+        </div>
+      </div>
+    </div>
+
+  </div><!-- /row -->
+
+  <!-- ═══ SEO GUIDE ═══ -->
+  <hr class="divider my-4" />
+  <div class="row g-4">
+    <div class="col-lg-8">
+      <div class="section-title">Guía completa: Cómo usar códigos QR</div>
+      <p class="section-sub">Todo lo que necesitas saber para crear y usar códigos QR profesionalmente</p>
+
+      <div class="panel mb-4">
+        <h2 style="font-family:var(--font-head);font-size:1.2rem;font-weight:700;margin-bottom:1rem">¿Qué es un código QR y cómo funciona?</h2>
+        <p style="color:var(--text2);line-height:1.8;font-size:0.93rem">Un código QR (Quick Response) es una matriz bidimensional de puntos negros y blancos que almacena información de forma digital. Fue creado en 1994 por Denso Wave, una subsidiaria de Toyota, originalmente para rastrear automóviles durante su manufactura. Hoy, los QR son omnipresentes: desde menús de restaurantes hasta pagos móviles, tarjetas de visita digitales y campañas de marketing.</p>
+        <p style="color:var(--text2);line-height:1.8;font-size:0.93rem;margin-top:0.75rem">La cámara de tu smartphone decodifica el patrón en milisegundos, redirigiendo al usuario a un sitio web, abriendo una app, conectándose a WiFi o ejecutando cualquier acción digital predefinida. Con <strong style="color:var(--accent)">QR Studio Pro</strong>, puedes crear QR de 9 tipos distintos de forma gratuita e instantánea.</p>
+
+        <h3 style="font-family:var(--font-head);font-size:1rem;font-weight:700;margin:1.25rem 0 0.6rem">Tipos de códigos QR y sus usos</h3>
+        <div class="row g-2">
+          <div class="col-md-6"><div class="p-3" style="background:var(--surface2);border-radius:var(--radius-sm);border:1px solid var(--border);height:100%"><strong style="color:var(--accent)"><i class="fa-solid fa-link me-1"></i>QR de URL</strong><p style="font-size:0.82rem;color:var(--text2);margin-top:6px;margin-bottom:0">Ideal para redirigir a sitios web, tiendas online, redes sociales o páginas de aterrizaje de campañas. El más usado en marketing digital.</p></div></div>
+          <div class="col-md-6"><div class="p-3" style="background:var(--surface2);border-radius:var(--radius-sm);border:1px solid var(--border);height:100%"><strong style="color:var(--purple)"><i class="fa-solid fa-wifi me-1"></i>QR de Wi-Fi</strong><p style="font-size:0.82rem;color:var(--text2);margin-top:6px;margin-bottom:0">Permite a tus huéspedes, clientes o empleados conectarse a tu red WiFi con solo escanear, sin necesidad de escribir contraseñas largas.</p></div></div>
+          <div class="col-md-6"><div class="p-3" style="background:var(--surface2);border-radius:var(--radius-sm);border:1px solid var(--border);height:100%"><strong style="color:var(--green)"><i class="fa-solid fa-address-card me-1"></i>QR vCard</strong><p style="font-size:0.82rem;color:var(--text2);margin-top:6px;margin-bottom:0">Comparte tu contacto profesional completo (nombre, teléfono, email, empresa) en segundos. Perfecto para eventos de networking.</p></div></div>
+          <div class="col-md-6"><div class="p-3" style="background:var(--surface2);border-radius:var(--radius-sm);border:1px solid var(--border);height:100%"><strong style="color:var(--gold)"><i class="fa-brands fa-whatsapp me-1"></i>QR WhatsApp</strong><p style="font-size:0.82rem;color:var(--text2);margin-top:6px;margin-bottom:0">Abre una conversación de WhatsApp directo con tu número, con un mensaje predefinido. Excelente para atención al cliente.</p></div></div>
+        </div>
+
+        <h3 style="font-family:var(--font-head);font-size:1rem;font-weight:700;margin:1.25rem 0 0.6rem">Personalización profesional de QR</h3>
+        <p style="color:var(--text2);line-height:1.8;font-size:0.93rem">La personalización visual de un código QR no es solo estética: también es estrategia de marca. Con QR Studio Pro puedes ajustar el <strong style="color:var(--text)">color del módulo</strong> (los puntos del QR), el <strong style="color:var(--text)">color de fondo</strong>, el <strong style="color:var(--text)">tamaño en píxeles</strong> y el <strong style="color:var(--text)">nivel de corrección de errores</strong>.</p>
+        <p style="color:var(--text2);line-height:1.8;font-size:0.93rem;margin-top:0.75rem">El nivel de corrección de errores determina cuánto del código puede estar dañado u ocluido y aun así ser legible. Si planeas añadir un logo sobre el QR, usa el nivel <strong style="color:var(--accent)">H (30%)</strong>. Para QR en pantallas digitales donde la calidad es garantizada, el nivel <strong style="color:var(--accent)">L (7%)</strong> es suficiente y genera un código más simple.</p>
+
+        <h3 style="font-family:var(--font-head);font-size:1rem;font-weight:700;margin:1.25rem 0 0.6rem">¿En qué formato debo descargar mi QR?</h3>
+        <p style="color:var(--text2);line-height:1.8;font-size:0.93rem"><strong style="color:var(--text)">PNG</strong>: Para uso digital general — redes sociales, presentaciones, emails. Funciona en todos los contextos.<br><strong style="color:var(--text)">SVG</strong>: Para impresión profesional. Al ser vectorial, escala a cualquier tamaño sin perder calidad. Ideal para banners, vallas o tarjetas de presentación.<br><strong style="color:var(--text)">PDF</strong>: Para documentos formales o para enviar a imprenta.</p>
+      </div>
+    </div>
+
+    <div class="col-lg-4">
+      <div class="ad-zone" style="height:280px;margin-bottom:1rem">
+        <i class="fa-regular fa-rectangle-ad"></i> ANUNCIO AQUÍ — 300×280
+      </div>
+    </div>
+  </div>
+
+  <!-- ═══ FAQ ═══ -->
+  <div class="row mt-2">
+    <div class="col-lg-8">
+      <div class="section-title">Preguntas Frecuentes</div>
+      <p class="section-sub">Resolvemos tus dudas sobre los códigos QR</p>
+      <div class="accordion" id="faqAccordion">
+        <div class="accordion-item">
+          <h2 class="accordion-header"><button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#faq1">¿Los QR generados expiran alguna vez?</button></h2>
+          <div id="faq1" class="accordion-collapse collapse show" data-bs-parent="#faqAccordion"><div class="accordion-body">No. Los códigos QR que generas con QR Studio Pro son estáticos y permanentes. El contenido (URL, texto, etc.) queda codificado directamente en el patrón visual del QR, por lo que no depende de ningún servidor externo. Mientras el contenido al que apunta (ej. tu sitio web) siga activo, el QR funcionará indefinidamente.</div></div>
+        </div>
+        <div class="accordion-item">
+          <h2 class="accordion-header"><button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#faq2">¿Se guardan mis datos cuando genero un QR?</button></h2>
+          <div id="faq2" class="accordion-collapse collapse" data-bs-parent="#faqAccordion"><div class="accordion-body">No almacenamos ningún dato en servidores. Todos los QR se generan 100% en tu navegador usando JavaScript local. El historial de QR recientes se guarda únicamente en el localStorage de tu dispositivo y nunca sale de él. Tu privacidad está completamente protegida.</div></div>
+        </div>
+        <div class="accordion-item">
+          <h2 class="accordion-header"><button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#faq3">¿Puedo añadir mi logo al código QR?</button></h2>
+          <div id="faq3" class="accordion-collapse collapse" data-bs-parent="#faqAccordion"><div class="accordion-body">Actualmente la herramienta no superpone logos automáticamente, pero puedes hacerlo manualmente: descarga el QR en SVG o PNG, usa el nivel de corrección H (30%), y superpón tu logo en el centro usando cualquier editor de imágenes como Canva, Photoshop o GIMP. El QR seguirá siendo legible gracias al nivel H de corrección.</div></div>
+        </div>
+        <div class="accordion-item">
+          <h2 class="accordion-header"><button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#faq4">¿Cuántos QR puedo generar? ¿Hay un límite?</button></h2>
+          <div id="faq4" class="accordion-collapse collapse" data-bs-parent="#faqAccordion"><div class="accordion-body">No existe ningún límite. Puedes generar tantos códigos QR como necesites de forma completamente gratuita. Para necesidades masivas, usa la pestaña "Masivo" para procesar múltiples URLs o textos a la vez.</div></div>
+        </div>
+        <div class="accordion-item">
+          <h2 class="accordion-header"><button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#faq5">¿Qué tamaño mínimo debe tener un QR para ser escaneable?</button></h2>
+          <div id="faq5" class="accordion-collapse collapse" data-bs-parent="#faqAccordion"><div class="accordion-body">En general, un mínimo de 2×2 cm para impresión es suficiente para condiciones normales. Para distancias mayores (vallas, pantallas de TV), escala proporcionalmente: a 1 metro de distancia, el QR debe medir al menos 10×10 cm. Descarga siempre en SVG para impresión a gran formato.</div></div>
+        </div>
+        <div class="accordion-item">
+          <h2 class="accordion-header"><button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#faq6">¿El escáner QR integrado funciona en todos los dispositivos?</button></h2>
+          <div id="faq6" class="accordion-collapse collapse" data-bs-parent="#faqAccordion"><div class="accordion-body">El escáner usa la API de cámara del navegador (getUserMedia) y funciona en Chrome, Firefox, Safari y Edge modernos, tanto en escritorio como en móvil. Es necesario conceder permiso de acceso a la cámara cuando el navegador lo solicite. En iOS Safari, asegúrate de que los permisos de cámara estén habilitados en Configuración > Safari.</div></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</div><!-- /container -->
+
+<!-- ═══ FOOTER ═══ -->
+<footer>
+  <div class="container">
+    <div class="row g-4">
+      <div class="col-md-4">
+        <div class="footer-brand mb-2">QR Studio Pro</div>
+        <p>Generador de códigos QR profesional, gratuito y sin registro. Toda la generación ocurre en tu navegador — tus datos son siempre privados.</p>
+      </div>
+      <div class="col-md-4">
+        <strong style="font-size:0.85rem;color:var(--text2)">Legal</strong>
+        <div class="d-flex flex-column gap-1 mt-2">
+          <a href="#" onclick="openModal('modalPrivacidad');return false;">Política de Privacidad</a>
+          <a href="#" onclick="openModal('modalTerminos');return false;">Términos de Servicio</a>
+          <a href="#" onclick="openModal('modalCookies');return false;">Política de Cookies</a>
+          <a href="#" onclick="openModal('modalContacto');return false;">Contacto</a>
+          <a href="#" onclick="openModal('modalAcerca');return false;">Acerca de</a>
+        </div>
+      </div>
+    </div>
+    <hr class="divider my-3" />
+    <div class="d-flex flex-wrap justify-content-between align-items-center gap-2">
+      <p style="margin:0;font-size:0.78rem">© 2025 QR Studio Pro · República de Panamá · Todos los QR se generan localmente en tu navegador.</p>
+      <p style="margin:0;font-size:0.78rem">
+        <a href="#" onclick="openModal('modalPrivacidad');return false;" style="color:var(--text3);margin-right:12px">Privacidad</a>
+        <a href="#" onclick="openModal('modalTerminos');return false;" style="color:var(--text3);margin-right:12px">Términos</a>
+        <a href="#" onclick="openModal('modalCookies');return false;" style="color:var(--text3)">Cookies</a>
+      </p>
+    </div>
+  </div>
+</footer>
+
+<!-- ═══ MODALES LEGALES ═══ -->
+<style>
+.legal-modal-overlay {
+  display:none; position:fixed; inset:0; z-index:9000;
+  background:rgba(0,0,0,0.75); backdrop-filter:blur(6px);
+  align-items:center; justify-content:center; padding:1rem;
+}
+.legal-modal-overlay.open { display:flex; }
+.legal-modal {
+  background:var(--surface); border:1px solid var(--border2);
+  border-radius:var(--radius); width:100%; max-width:680px;
+  max-height:88vh; overflow-y:auto; padding:2rem;
+  position:relative; box-shadow:0 24px 80px rgba(0,0,0,0.5);
+}
+.legal-modal h2 { font-family:var(--font-head); font-size:1.4rem; font-weight:800; letter-spacing:-0.03em; color:var(--accent); margin-bottom:0.25rem; }
+.legal-modal .legal-date { font-size:0.75rem; color:var(--text3); margin-bottom:1.5rem; }
+.legal-modal h3 { font-family:var(--font-head); font-size:0.95rem; font-weight:700; color:var(--text); margin:1.25rem 0 0.4rem; }
+.legal-modal p, .legal-modal li { font-size:0.88rem; color:var(--text2); line-height:1.8; }
+.legal-modal ul { padding-left:1.25rem; margin:0.4rem 0; }
+.legal-modal .close-btn {
+  position:sticky; top:0; float:right; margin:-0.5rem -0.5rem 0.5rem 0;
+  background:var(--surface2); border:1px solid var(--border2);
+  border-radius:50%; width:34px; height:34px; cursor:pointer;
+  display:flex; align-items:center; justify-content:center;
+  color:var(--text2); font-size:0.9rem; transition:all 0.2s;
+  flex-shrink:0;
+}
+.legal-modal .close-btn:hover { background:var(--surface3); color:var(--text); }
+.legal-divider { border:none; border-top:1px solid var(--border); margin:1rem 0; }
+.legal-badge { display:inline-flex; align-items:center; gap:5px; background:rgba(16,185,129,0.1); border:1px solid rgba(16,185,129,0.2); border-radius:6px; padding:3px 10px; font-size:0.72rem; font-weight:600; color:var(--green); margin-bottom:1rem; }
+</style>
+
+<!-- MODAL: POLÍTICA DE PRIVACIDAD -->
+<div class="legal-modal-overlay" id="modalPrivacidad" onclick="closeModalOutside(event,'modalPrivacidad')">
+  <div class="legal-modal">
+    <button class="close-btn" onclick="closeModal('modalPrivacidad')"><i class="fa-solid fa-xmark"></i></button>
+    <h2><i class="fa-solid fa-shield-halved me-2"></i>Política de Privacidad</h2>
+    <div class="legal-date">Última actualización: enero 2025 · Jurisdicción: República de Panamá</div>
+    <span class="legal-badge"><i class="fa-solid fa-lock"></i> Sin almacenamiento de datos</span>
+
+    <h3>1. Identificación del Responsable</h3>
+    <p>La presente Política de Privacidad regula el uso de la plataforma <strong>QR Studio Pro</strong>, herramienta gratuita de generación de códigos QR operada bajo las leyes de la República de Panamá, en particular la <strong>Ley 81 de 26 de marzo de 2019</strong> sobre Protección de Datos Personales y su decreto ejecutivo reglamentario.</p>
+
+    <h3>2. Datos que NO recopilamos</h3>
+    <p>QR Studio Pro ha sido diseñada bajo el principio de <strong>privacidad por diseño</strong>. La plataforma <strong>no recopila, no almacena, no procesa ni transfiere a ningún servidor</strong> información personal alguna. Específicamente:</p>
+    <ul>
+      <li>No se recopilan nombres, correos electrónicos ni datos de contacto.</li>
+      <li>No se registran las URLs, textos, datos WiFi, vCards ni ningún contenido que el usuario ingrese para generar QR.</li>
+      <li>No se almacenan los códigos QR generados en ninguna base de datos propia ni de terceros.</li>
+      <li>No se realizan análisis de comportamiento del usuario ni seguimiento de navegación.</li>
+      <li>No se utilizan tecnologías de identificación persistente como fingerprinting.</li>
+    </ul>
+
+    <h3>3. Procesamiento local en el navegador</h3>
+    <p>Todo el procesamiento de QR Studio Pro ocurre <strong>exclusivamente en el dispositivo del usuario</strong> mediante JavaScript ejecutado en el navegador. Los datos ingresados en los formularios nunca salen del dispositivo del usuario hacia nuestros servidores.</p>
+
+    <h3>4. Historial local (localStorage)</h3>
+    <p>La funcionalidad de historial de QR recientes utiliza exclusivamente el <strong>localStorage del navegador</strong> del usuario. Esta información reside únicamente en el dispositivo del usuario, no es accesible por QR Studio Pro y puede ser eliminada en cualquier momento desde la propia aplicación o borrando los datos del navegador.</p>
+
+    <h3>5. Módulo de archivos y Cloudinary</h3>
+    <p>Cuando el usuario opta por utilizar la función de subida de archivos, los archivos se transfieren directamente desde el navegador del usuario hacia la plataforma <strong>Cloudinary</strong>, usando las credenciales que el propio usuario configura. QR Studio Pro <strong>no interviene ni tiene acceso</strong> a dichos archivos. El tratamiento de datos en Cloudinary se rige por la política de privacidad de Cloudinary, Inc.</p>
+
+    <h3>6. Cookies</h3>
+    <p>QR Studio Pro no utiliza cookies propias de seguimiento ni publicidad. Consulte nuestra Política de Cookies para mayor detalle.</p>
+
+    <h3>7. Servicios de terceros (CDN)</h3>
+    <p>La plataforma carga librerías JavaScript desde servidores CDN de terceros (jsDelivr, Cloudflare CDN, unpkg). Estas solicitudes pueden registrar su dirección IP en los registros de acceso estándar de dichos proveedores, lo cual está fuera del control de QR Studio Pro.</p>
+
+    <h3>8. Derechos del usuario</h3>
+    <p>Dado que QR Studio Pro no almacena datos personales, los derechos de acceso, rectificación, cancelación y oposición establecidos en la Ley 81 de 2019 de Panamá no son aplicables en relación con esta plataforma. Si tiene dudas, puede contactarnos en <strong>contacto@qrstudiopro.com</strong>.</p>
+
+    <h3>9. Modificaciones</h3>
+    <p>QR Studio Pro se reserva el derecho de actualizar esta política. Las modificaciones serán publicadas en esta misma sección con la fecha de actualización correspondiente.</p>
+
+    <hr class="legal-divider" />
+    <p style="font-size:0.78rem;color:var(--text3)">Esta política fue redactada conforme a la Ley 81 de 26 de marzo de 2019 de la República de Panamá sobre Protección de Datos Personales.</p>
+  </div>
+</div>
+
+<!-- MODAL: TÉRMINOS DE SERVICIO -->
+<div class="legal-modal-overlay" id="modalTerminos" onclick="closeModalOutside(event,'modalTerminos')">
+  <div class="legal-modal">
+    <button class="close-btn" onclick="closeModal('modalTerminos')"><i class="fa-solid fa-xmark"></i></button>
+    <h2><i class="fa-solid fa-file-contract me-2"></i>Términos de Servicio</h2>
+    <div class="legal-date">Última actualización: enero 2025 · Jurisdicción: República de Panamá</div>
+
+    <h3>1. Aceptación de los Términos</h3>
+    <p>Al acceder y utilizar <strong>QR Studio Pro</strong>, el usuario acepta quedar vinculado por los presentes Términos de Servicio. Si no está de acuerdo con alguna de las condiciones aquí establecidas, debe abstenerse de utilizar la plataforma.</p>
+
+    <h3>2. Descripción del Servicio</h3>
+    <p>QR Studio Pro es una herramienta gratuita de generación de códigos QR que opera completamente en el navegador del usuario. El servicio se provee <strong>"tal como está" (as-is)</strong>, sin garantías de ningún tipo, expresas o implícitas.</p>
+
+    <h3>3. USO BAJO PROPIO RIESGO — Exención de Responsabilidad</h3>
+    <p><strong>EL USO DE QR STUDIO PRO ES ENTERAMENTE BAJO LA RESPONSABILIDAD Y RIESGO DEL USUARIO.</strong> Por ser una plataforma gratuita, QR Studio Pro, sus desarrolladores, colaboradores y operadores:</p>
+    <ul>
+      <li>No garantizan la disponibilidad continua, ininterrumpida ni libre de errores del servicio.</li>
+      <li>No son responsables por daños directos, indirectos, incidentales, especiales o consecuentes derivados del uso o imposibilidad de uso de la plataforma.</li>
+      <li>No garantizan que los códigos QR generados sean escaneables en todos los dispositivos o aplicaciones de terceros.</li>
+      <li>No son responsables por el uso que terceros hagan de los QR generados por el usuario.</li>
+      <li>No asumen responsabilidad alguna por pérdida de datos, interrupción del negocio, o cualquier perjuicio económico derivado del uso de la herramienta.</li>
+    </ul>
+
+    <h3>4. Uso Permitido</h3>
+    <p>El usuario se compromete a utilizar QR Studio Pro únicamente para fines lícitos conforme a la legislación de la República de Panamá y del país desde donde acceda al servicio. Queda expresamente prohibido:</p>
+    <ul>
+      <li>Generar QR que contengan o redirijan a contenido ilegal, fraudulento, malicioso o que viole derechos de terceros.</li>
+      <li>Utilizar la plataforma para actividades de phishing, distribución de malware o cualquier forma de ciberataque.</li>
+      <li>Reproducir, copiar o distribuir el código fuente de la aplicación con fines comerciales sin autorización expresa.</li>
+      <li>Intentar vulnerar, hackear o interferir con el funcionamiento normal de la plataforma.</li>
+    </ul>
+
+    <h3>5. Propiedad Intelectual</h3>
+    <p>El diseño, código, marca y contenidos de QR Studio Pro son propiedad de sus desarrolladores y están protegidos por las leyes de propiedad intelectual aplicables. Las librerías de terceros utilizadas conservan sus respectivas licencias (MIT, Apache 2.0).</p>
+
+    <h3>6. Servicio Gratuito — Sin Garantía de Continuidad</h3>
+    <p>QR Studio Pro se ofrece de forma gratuita y puede ser modificado, suspendido o discontinuado en cualquier momento y sin previo aviso, sin que ello genere derecho a indemnización o compensación alguna para el usuario.</p>
+
+    <h3>7. Ley Aplicable y Jurisdicción</h3>
+    <p>Los presentes Términos se rigen por las leyes de la <strong>República de Panamá</strong>. Cualquier disputa derivada del uso de esta plataforma será sometida a los tribunales competentes de la República de Panamá, renunciando el usuario a cualquier otro fuero que pudiere corresponderle.</p>
+
+    <h3>8. Modificaciones</h3>
+    <p>QR Studio Pro se reserva el derecho de modificar estos Términos en cualquier momento. El uso continuado de la plataforma tras la publicación de cambios implica la aceptación de los nuevos términos.</p>
+
+    <hr class="legal-divider" />
+    <p style="font-size:0.78rem;color:var(--text3)">Redactado conforme al Código Civil de la República de Panamá y la Ley 81 de 2019 sobre Protección de Datos Personales.</p>
+  </div>
+</div>
+
+<!-- MODAL: POLÍTICA DE COOKIES -->
+<div class="legal-modal-overlay" id="modalCookies" onclick="closeModalOutside(event,'modalCookies')">
+  <div class="legal-modal">
+    <button class="close-btn" onclick="closeModal('modalCookies')"><i class="fa-solid fa-cookie-bite me-2"></i></button>
+    <h2><i class="fa-solid fa-cookie-bite me-2"></i>Política de Cookies</h2>
+    <div class="legal-date">Última actualización: enero 2025 · Jurisdicción: República de Panamá</div>
+    <span class="legal-badge"><i class="fa-solid fa-cookie"></i> Sin cookies de seguimiento</span>
+
+    <h3>1. ¿Qué son las cookies?</h3>
+    <p>Las cookies son pequeños archivos de texto que los sitios web almacenan en el dispositivo del usuario. QR Studio Pro tiene una política de uso mínimo de cookies, comprometida con la privacidad del usuario.</p>
+
+    <h3>2. Cookies propias</h3>
+    <p>QR Studio Pro <strong>no utiliza cookies propias</strong> de ningún tipo. No se instalan cookies de sesión, de autenticación, de preferencias ni de seguimiento en el dispositivo del usuario.</p>
+
+    <h3>3. localStorage (almacenamiento local)</h3>
+    <p>La aplicación utiliza el <strong>localStorage</strong> del navegador exclusivamente para:</p>
+    <ul>
+      <li>Guardar la configuración de Cloudinary ingresada voluntariamente por el usuario (Cloud Name y Upload Preset).</li>
+      <li>Almacenar el historial de los últimos 5 QR generados para facilitar el acceso rápido.</li>
+    </ul>
+    <p>Esta información reside únicamente en el dispositivo del usuario, <strong>nunca se transmite a ningún servidor</strong> y puede eliminarse en cualquier momento desde la aplicación o borrando los datos del sitio en el navegador.</p>
+
+    <h3>4. Cookies de terceros (CDN)</h3>
+    <p>Al cargar recursos desde servidores CDN externos (jsDelivr, Cloudflare, unpkg), es posible que dichos proveedores instalen cookies técnicas propias. QR Studio Pro no tiene control sobre estas cookies. Consulte las políticas de privacidad de cada proveedor para mayor información.</p>
+
+    <h3>5. Cómo gestionar o eliminar cookies</h3>
+    <p>El usuario puede gestionar, bloquear o eliminar cookies desde la configuración de su navegador. A continuación se indican las rutas en los navegadores más comunes:</p>
+    <ul>
+      <li><strong>Chrome:</strong> Configuración → Privacidad y seguridad → Cookies.</li>
+      <li><strong>Firefox:</strong> Opciones → Privacidad y seguridad → Cookies.</li>
+      <li><strong>Safari:</strong> Preferencias → Privacidad → Gestionar datos de sitios web.</li>
+      <li><strong>Edge:</strong> Configuración → Privacidad → Cookies.</li>
+    </ul>
+
+    <hr class="legal-divider" />
+    <p style="font-size:0.78rem;color:var(--text3)">Política elaborada conforme a la Ley 81 de 2019 de la República de Panamá sobre Protección de Datos Personales.</p>
+  </div>
+</div>
+
+<!-- MODAL: CONTACTO -->
+<div class="legal-modal-overlay" id="modalContacto" onclick="closeModalOutside(event,'modalContacto')">
+  <div class="legal-modal" style="max-width:480px">
+    <button class="close-btn" onclick="closeModal('modalContacto')"><i class="fa-solid fa-xmark"></i></button>
+    <h2><i class="fa-solid fa-envelope me-2"></i>Contacto</h2>
+    <div class="legal-date">República de Panamá</div>
+
+    <p>Para consultas, reportes de errores o sugerencias sobre QR Studio Pro, puedes contactarnos a través de los siguientes canales:</p>
+
+    <div class="d-flex flex-column gap-3 mt-3">
+      <div class="d-flex align-items-center gap-3 p-3" style="background:var(--surface2);border:1px solid var(--border);border-radius:var(--radius-sm)">
+        <i class="fa-solid fa-envelope fa-lg" style="color:var(--accent);flex-shrink:0"></i>
+        <div>
+          <div style="font-size:0.75rem;color:var(--text3);text-transform:uppercase;letter-spacing:0.06em">Correo electrónico</div>
+          <div style="font-size:0.9rem;font-weight:600">contacto@qrstudiopro.com</div>
+        </div>
+      </div>
+      <div class="d-flex align-items-center gap-3 p-3" style="background:var(--surface2);border:1px solid var(--border);border-radius:var(--radius-sm)">
+        <i class="fa-solid fa-location-dot fa-lg" style="color:var(--accent);flex-shrink:0"></i>
+        <div>
+          <div style="font-size:0.75rem;color:var(--text3);text-transform:uppercase;letter-spacing:0.06em">Jurisdicción</div>
+          <div style="font-size:0.9rem;font-weight:600">República de Panamá</div>
+        </div>
+      </div>
+      <div class="d-flex align-items-center gap-3 p-3" style="background:var(--surface2);border:1px solid var(--border);border-radius:var(--radius-sm)">
+        <i class="fa-solid fa-clock fa-lg" style="color:var(--accent);flex-shrink:0"></i>
+        <div>
+          <div style="font-size:0.75rem;color:var(--text3);text-transform:uppercase;letter-spacing:0.06em">Tiempo de respuesta</div>
+          <div style="font-size:0.9rem;font-weight:600">2 a 5 días hábiles</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="mt-3 p-3" style="background:rgba(56,189,248,0.06);border:1px solid rgba(56,189,248,0.15);border-radius:var(--radius-sm)">
+      <p style="font-size:0.82rem;margin:0"><i class="fa-solid fa-circle-info me-1" style="color:var(--accent)"></i> QR Studio Pro es una herramienta gratuita. No ofrecemos soporte técnico garantizado, pero hacemos nuestro mejor esfuerzo para responder todas las consultas.</p>
+    </div>
+  </div>
+</div>
+
+<!-- MODAL: ACERCA DE -->
+<div class="legal-modal-overlay" id="modalAcerca" onclick="closeModalOutside(event,'modalAcerca')">
+  <div class="legal-modal" style="max-width:520px">
+    <button class="close-btn" onclick="closeModal('modalAcerca')"><i class="fa-solid fa-xmark"></i></button>
+    <h2><i class="fa-solid fa-qrcode me-2"></i>Acerca de QR Studio Pro</h2>
+    <div class="legal-date">Versión 1.0 · República de Panamá · 2025</div>
+
+    <p>QR Studio Pro es una plataforma gratuita de generación de códigos QR profesionales, desarrollada con el objetivo de brindar una herramienta accesible, privada y sin necesidad de registro para creadores, empresas y profesionales.</p>
+
+    <div class="row g-2 my-3">
+      <div class="col-6"><div class="p-3 text-center" style="background:var(--surface2);border:1px solid var(--border);border-radius:var(--radius-sm)"><div style="font-family:var(--font-head);font-size:1.8rem;font-weight:800;color:var(--accent)">9+</div><div style="font-size:0.72rem;color:var(--text3)">Tipos de QR</div></div></div>
+      <div class="col-6"><div class="p-3 text-center" style="background:var(--surface2);border:1px solid var(--border);border-radius:var(--radius-sm)"><div style="font-family:var(--font-head);font-size:1.8rem;font-weight:800;color:var(--accent)">100%</div><div style="font-size:0.72rem;color:var(--text3)">Gratuito y privado</div></div></div>
+    </div>
+
+    <h3>Tecnologías utilizadas</h3>
+    <div class="d-flex flex-wrap gap-2 mb-3">
+      <span class="tag">Bootstrap 5</span>
+      <span class="tag">QRCode.js</span>
+      <span class="tag">jsPDF</span>
+      <span class="tag">Html5-QRCode</span>
+      <span class="tag">FontAwesome 6</span>
+      <span class="tag">Cloudinary API</span>
+    </div>
+
+    <h3>Filosofía de privacidad</h3>
+    <p>Toda la generación de QR ocurre en el navegador del usuario. <strong>No almacenamos ningún dato en servidores propios.</strong> Lo que generas es tuyo y solo tuyo.</p>
+
+    <h3>Aviso legal</h3>
+    <p>QR Studio Pro se provee de forma gratuita <strong>"tal como está"</strong>, sin garantías de ningún tipo. Su uso es bajo el propio riesgo del usuario, conforme a los Términos de Servicio y las leyes de la República de Panamá.</p>
+
+    <hr class="legal-divider" />
+    <p style="font-size:0.78rem;color:var(--text3);text-align:center">© 2025 QR Studio Pro · República de Panamá · Todos los derechos reservados.</p>
+  </div>
+</div>
+
+<!-- Toast container -->
+<div class="toast-container" id="toastContainer"></div>
+
+<!-- ═══ SCRIPTS ═══ -->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+<script src="https://unpkg.com/html5-qrcode@2.3.8/html5-qrcode.min.js"></script>
+
+<script>
+/* ══════════════════════════════════════════
+   QR STUDIO PRO — Main JavaScript
+   ══════════════════════════════════════════ */
+
+let currentType = 'url';
+let lastQRContent = '';
+let html5QrCode = null;
+let massQRData = [];
+
+// ── TYPE SELECTOR ──
+function setType(type, el) {
+  currentType = type;
+  document.querySelectorAll('.type-btn').forEach(b => b.classList.remove('active'));
+  el.classList.add('active');
+  document.querySelectorAll('.qr-fields').forEach(f => f.classList.remove('active'));
+  document.getElementById('fields-' + type).classList.add('active');
+}
+
+// ── COLOR UPDATES ──
+function updateColor(target, val) {
+  if (target === 'qr') {
+    document.getElementById('qrColorBox').style.background = val;
+    document.getElementById('qrColorHex').textContent = val;
+  } else {
+    document.getElementById('bgColorBox').style.background = val;
+    document.getElementById('bgColorHex').textContent = val;
+  }
+}
+
+// ── BUILD QR CONTENT STRING ──
+function buildContent() {
+  switch (currentType) {
+    case 'url': return document.getElementById('f-url').value.trim() || 'https://ejemplo.com';
+    case 'text': return document.getElementById('f-text').value.trim() || 'Mi texto QR';
+    case 'wifi': {
+      const s = document.getElementById('f-wifi-ssid').value.trim();
+      const p = document.getElementById('f-wifi-pass').value.trim();
+      const t = document.getElementById('f-wifi-sec').value;
+      return `WIFI:T:${t};S:${s};P:${p};;`;
+    }
+    case 'vcard': {
+      const n = document.getElementById('f-vc-name').value.trim();
+      const t = document.getElementById('f-vc-tel').value.trim();
+      const e = document.getElementById('f-vc-email').value.trim();
+      const o = document.getElementById('f-vc-org').value.trim();
+      const u = document.getElementById('f-vc-url').value.trim();
+      return `BEGIN:VCARD\nVERSION:3.0\nFN:${n}\nTEL:${t}\nEMAIL:${e}\nORG:${o}\nURL:${u}\nEND:VCARD`;
+    }
+    case 'email': {
+      const to = document.getElementById('f-em-to').value.trim();
+      const sub = encodeURIComponent(document.getElementById('f-em-sub').value.trim());
+      const body = encodeURIComponent(document.getElementById('f-em-body').value.trim());
+      return `mailto:${to}?subject=${sub}&body=${body}`;
+    }
+    case 'sms': {
+      const n = document.getElementById('f-sms-num').value.trim();
+      const m = encodeURIComponent(document.getElementById('f-sms-msg').value.trim());
+      return `sms:${n}?body=${m}`;
+    }
+    case 'whatsapp': {
+      const n = document.getElementById('f-wa-num').value.trim();
+      const m = encodeURIComponent(document.getElementById('f-wa-msg').value.trim());
+      return `https://wa.me/${n}?text=${m}`;
+    }
+    case 'event': {
+      const name = document.getElementById('f-ev-name').value.trim();
+      const start = document.getElementById('f-ev-start').value.replace(/[-:T]/g,'').slice(0,15) + 'Z';
+      const end = document.getElementById('f-ev-end').value.replace(/[-:T]/g,'').slice(0,15) + 'Z';
+      const loc = document.getElementById('f-ev-loc').value.trim();
+      return `BEGIN:VEVENT\nSUMMARY:${name}\nDTSTART:${start}\nDTEND:${end}\nLOCATION:${loc}\nEND:VEVENT`;
+    }
+    case 'crypto': {
+      const coin = document.getElementById('f-cr-coin').value;
+      const addr = document.getElementById('f-cr-addr').value.trim();
+      const amt = document.getElementById('f-cr-amt').value.trim();
+      return amt ? `${coin}:${addr}?amount=${amt}` : `${coin}:${addr}`;
+    }
+    default: return '';
+  }
+}
+
+// ── GENERATE QR ──
+function generateQR() {
+  const content = buildContent();
+  if (!content) { showToast('Completa los campos requeridos', 'error'); return; }
+  lastQRContent = content;
+
+  const size = parseInt(document.getElementById('qrSize').value);
+  const colorDark = document.getElementById('qrColorPick').value;
+  const colorLight = document.getElementById('bgColorPick').value;
+  const margin = parseInt(document.getElementById('qrMargin').value);
+  const eccMap = { L: QRCode.CorrectLevel.L, M: QRCode.CorrectLevel.M, Q: QRCode.CorrectLevel.Q, H: QRCode.CorrectLevel.H };
+  const ecc = eccMap[document.getElementById('qrECC').value];
+
+  const container = document.getElementById('qrContainer');
+  container.innerHTML = '';
+
+  try {
+    new QRCode(container, {
+      text: content,
+      width: Math.min(size, 400),
+      height: Math.min(size, 400),
+      colorDark,
+      colorLight,
+      correctLevel: ecc
+    });
+  } catch(e) {
+    showToast('Error al generar QR. Verifica el contenido.', 'error');
+    return;
+  }
+
+  document.getElementById('qrContentPreview').textContent = content.length > 80 ? content.slice(0,80)+'…' : content;
+  const panel = document.getElementById('resultPanel');
+  panel.style.display = 'block';
+  panel.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+
+  saveToHistory(content, currentType);
+  showToast('¡QR generado exitosamente!', 'success');
+}
+
+// ── GET CANVAS ──
+function getQRCanvas() {
+  return document.getElementById('qrContainer').querySelector('canvas');
+}
+
+// ── DOWNLOAD PNG ──
+function downloadPNG() {
+  const canvas = getQRCanvas();
+  if (!canvas) { showToast('Genera un QR primero', 'error'); return; }
+  const size = parseInt(document.getElementById('qrSize').value);
+  const hd = document.createElement('canvas');
+  hd.width = size * 2; hd.height = size * 2;
+  const ctx = hd.getContext('2d');
+  ctx.imageSmoothingEnabled = false;
+  ctx.drawImage(canvas, 0, 0, hd.width, hd.height);
+  const a = document.createElement('a');
+  a.download = 'qr-studio-pro.png';
+  a.href = hd.toDataURL('image/png');
+  a.click();
+  showToast('PNG descargado (alta resolución)', 'success');
+}
+
+// ── DOWNLOAD SVG ──
+function downloadSVG() {
+  const canvas = getQRCanvas();
+  if (!canvas) { showToast('Genera un QR primero', 'error'); return; }
+  const size = parseInt(document.getElementById('qrSize').value);
+  const colorDark = document.getElementById('qrColorPick').value;
+  const colorLight = document.getElementById('bgColorPick').value;
+  const dataURL = canvas.toDataURL('image/png');
+  const svgContent = `<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="${size}" height="${size}" viewBox="0 0 ${size} ${size}">
+  <rect width="${size}" height="${size}" fill="${colorLight}"/>
+  <image href="${dataURL}" x="0" y="0" width="${size}" height="${size}"/>
+</svg>`;
+  const blob = new Blob([svgContent], { type: 'image/svg+xml' });
+  const a = document.createElement('a');
+  a.download = 'qr-studio-pro.svg';
+  a.href = URL.createObjectURL(blob);
+  a.click();
+  showToast('SVG descargado', 'success');
+}
+
+// ── DOWNLOAD PDF ──
+function downloadPDF() {
+  const canvas = getQRCanvas();
+  if (!canvas) { showToast('Genera un QR primero', 'error'); return; }
+  const { jsPDF } = window.jspdf;
+  const doc = new jsPDF({ unit: 'mm', format: 'a4' });
+  const imgData = canvas.toDataURL('image/png');
+  const pageW = doc.internal.pageSize.getWidth();
+  const qrMM = 80;
+  const x = (pageW - qrMM) / 2;
+  doc.setFont('helvetica', 'bold');
+  doc.setFontSize(18);
+  doc.setTextColor(56,189,248);
+  doc.text('QR Studio Pro', pageW/2, 20, { align: 'center' });
+  doc.setFontSize(10);
+  doc.setTextColor(148,163,184);
+  doc.text('Generado en qrstudiopro.com', pageW/2, 27, { align: 'center' });
+  doc.addImage(imgData, 'PNG', x, 35, qrMM, qrMM);
+  const preview = lastQRContent.length > 60 ? lastQRContent.slice(0,60)+'…' : lastQRContent;
+  doc.setFontSize(9);
+  doc.setTextColor(100,116,139);
+  doc.text(preview, pageW/2, 125, { align: 'center', maxWidth: pageW - 20 });
+  doc.save('qr-studio-pro.pdf');
+  showToast('PDF descargado', 'success');
+}
+
+// ── COPY CONTENT ──
+function copyContent() {
+  if (!lastQRContent) return;
+  navigator.clipboard.writeText(lastQRContent).then(() => showToast('Copiado al portapapeles', 'success'));
+}
+
+// ── THEME TOGGLE ──
+function toggleTheme() {
+  const html = document.documentElement;
+  const isDark = html.getAttribute('data-theme') === 'dark';
+  html.setAttribute('data-theme', isDark ? 'light' : 'dark');
+  document.getElementById('themeIcon').className = isDark ? 'fa-solid fa-sun' : 'fa-solid fa-moon';
+  document.getElementById('themeLabel').textContent = isDark ? 'Oscuro' : 'Claro';
+}
+
+// ── HISTORY ──
+function saveToHistory(content, type) {
+  let hist = JSON.parse(localStorage.getItem('qrHistory') || '[]');
+  const thumb = getQRCanvas() ? getQRCanvas().toDataURL('image/png') : null;
+  hist.unshift({ content, type, thumb, ts: Date.now() });
+  hist = hist.slice(0, 5);
+  localStorage.setItem('qrHistory', JSON.stringify(hist));
+  renderHistory();
+}
+
+function renderHistory() {
+  const hist = JSON.parse(localStorage.getItem('qrHistory') || '[]');
+  const el = document.getElementById('historyList');
+  if (!hist.length) {
+    el.innerHTML = '<p style="font-size:0.82rem;color:var(--text3);text-align:center;padding:1rem 0">Los últimos 5 QR aparecerán aquí</p>';
+    return;
+  }
+  const typeLabels = { url:'URL', text:'Texto', wifi:'Wi-Fi', vcard:'vCard', email:'Email', sms:'SMS', whatsapp:'WhatsApp', event:'Evento', crypto:'Cripto' };
+  el.innerHTML = hist.map((h, i) => `
+    <div class="hist-item" onclick="loadFromHistory(${i})">
+      <div class="hist-thumb">${h.thumb ? `<img src="${h.thumb}" />` : '<i class="fa-solid fa-qrcode" style="font-size:1.2rem;color:#64748b"></i>'}</div>
+      <div class="hist-text">
+        <div class="hist-label">${h.content.length > 35 ? h.content.slice(0,35)+'…' : h.content}</div>
+        <div class="hist-type"><span class="tag">${typeLabels[h.type]||h.type}</span> · ${new Date(h.ts).toLocaleTimeString('es',{hour:'2-digit',minute:'2-digit'})}</div>
+      </div>
+      <i class="fa-solid fa-rotate-right" style="color:var(--text3);font-size:0.8rem"></i>
+    </div>`).join('');
+}
+
+function loadFromHistory(i) {
+  const hist = JSON.parse(localStorage.getItem('qrHistory') || '[]');
+  const h = hist[i];
+  if (!h) return;
+  // Switch to gen tab
+  document.querySelector('[data-bs-target="#tabGen"]').click();
+  setType(h.type, document.querySelector(`[data-type="${h.type}"]`));
+  if (h.type === 'url') document.getElementById('f-url').value = h.content;
+  else if (h.type === 'text') document.getElementById('f-text').value = h.content;
+  setTimeout(generateQR, 100);
+}
+
+function clearHistory() {
+  localStorage.removeItem('qrHistory');
+  renderHistory();
+  showToast('Historial borrado', 'success');
+}
+
+// ── SCANNER ──
+async function startScanner() {
+  document.getElementById('startScanBtn').style.display = 'none';
+  document.getElementById('stopScanBtn').style.display = 'flex';
+  html5QrCode = new Html5Qrcode('qr-reader');
+  try {
+    await html5QrCode.start(
+      { facingMode: 'environment' },
+      { fps: 10, qrbox: { width: 250, height: 250 } },
+      (text) => {
+        document.getElementById('scanText').textContent = text;
+        document.getElementById('scanResult').classList.add('visible');
+        stopScanner();
+      },
+      () => {}
+    );
+  } catch(e) {
+    showToast('No se pudo acceder a la cámara. Verifica los permisos.', 'error');
+    document.getElementById('startScanBtn').style.display = 'block';
+    document.getElementById('stopScanBtn').style.display = 'none';
+  }
+}
+
+async function stopScanner() {
+  document.getElementById('startScanBtn').style.display = 'block';
+  document.getElementById('stopScanBtn').style.display = 'none';
+  if (html5QrCode) {
+    try { await html5QrCode.stop(); html5QrCode.clear(); } catch(e){}
+    html5QrCode = null;
+  }
+}
+
+function openScanned() {
+  const t = document.getElementById('scanText').textContent;
+  if (t.startsWith('http')) window.open(t, '_blank');
+  else showToast('El contenido no es una URL', 'error');
+}
+
+function copyScanned() {
+  navigator.clipboard.writeText(document.getElementById('scanText').textContent)
+    .then(() => showToast('Copiado', 'success'));
+}
+
+function genFromScanned() {
+  const t = document.getElementById('scanText').textContent;
+  document.querySelector('[data-bs-target="#tabGen"]').click();
+  document.getElementById('f-url').value = t;
+  setType('url', document.querySelector('[data-type="url"]'));
+  setTimeout(generateQR, 150);
+}
+
+// ── MASS GENERATOR ──
+function generateMass() {
+  const lines = document.getElementById('massInput').value.split('\n').map(l => l.trim()).filter(Boolean);
+  if (!lines.length) { showToast('Ingresa al menos una URL o texto', 'error'); return; }
+
+  const container = document.getElementById('massResults');
+  container.innerHTML = '';
+  massQRData = [];
+
+  lines.forEach((line, idx) => {
+    const div = document.createElement('div');
+    div.className = 'mass-item-card';
+    const thumbId = `massQR_${idx}`;
+    div.innerHTML = `
+      <div class="mass-qr-thumb" id="${thumbId}"></div>
+      <div style="flex:1;min-width:0">
+        <div style="font-size:0.82rem;font-weight:600;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">${line}</div>
+        <div style="font-size:0.72rem;color:var(--text3)">QR #${idx+1}</div>
+      </div>
+      <button class="btn-dl" onclick="downloadMassItem(${idx})"><i class="fa-solid fa-download"></i></button>`;
+    container.appendChild(div);
+
+    setTimeout(() => {
+      const thumb = document.getElementById(thumbId);
+      try {
+        const qr = new QRCode(thumb, { text: line, width: 60, height: 60, colorDark: '#000000', colorLight: '#ffffff', correctLevel: QRCode.CorrectLevel.M });
+        const canvas = thumb.querySelector('canvas');
+        massQRData.push({ line, canvas });
+      } catch(e) { massQRData.push({ line, canvas: null }); }
+    }, idx * 80);
+  });
+
+  document.getElementById('massDownloadBtns').style.display = 'flex';
+  showToast(`Generando ${lines.length} códigos QR...`, 'success');
+}
+
+function downloadMassItem(idx) {
+  const { canvas, line } = massQRData[idx] || {};
+  if (!canvas) return;
+  const a = document.createElement('a');
+  a.download = `qr-${idx+1}.png`;
+  a.href = canvas.toDataURL();
+  a.click();
+}
+
+// ── FILE UPLOAD + CLOUDINARY INTEGRATION ──
+
+let selectedFile = null;
+
+// Drag & Drop handlers
+function handleDragOver(e) { e.preventDefault(); document.getElementById('dropZone').classList.add('drag-over'); }
+function handleDragLeave() { document.getElementById('dropZone').classList.remove('drag-over'); }
+function handleDrop(e) {
+  e.preventDefault();
+  document.getElementById('dropZone').classList.remove('drag-over');
+  const f = e.dataTransfer.files[0];
+  if (f) processFile(f);
+}
+function handleFileSelect(input) {
+  if (input.files[0]) processFile(input.files[0]);
+}
+
+// File type icon mapping
+function getFileIcon(type) {
+  if (type === 'application/pdf') return 'fa-file-pdf';
+  if (type.startsWith('image/')) return 'fa-file-image';
+  if (type.startsWith('audio/')) return 'fa-file-audio';
+  return 'fa-file';
+}
+
+function processFile(file) {
+  // Validate size (20MB max)
+  if (file.size > 20 * 1024 * 1024) {
+    showToast('El archivo supera el límite de 20MB', 'error');
+    return;
+  }
+  selectedFile = file;
+  document.getElementById('fileName').textContent = file.name;
+  document.getElementById('fileSize').textContent =
+    (file.size / 1024 / 1024).toFixed(2) + ' MB · ' + (file.type || 'archivo');
+  document.getElementById('fileIcon').className = `fa-solid ${getFileIcon(file.type)} fa-2x`;
+  document.getElementById('fileIcon').style.color = 'var(--accent)';
+  document.getElementById('fileInfo').style.display = 'block';
+  document.getElementById('uploadResult').style.display = 'none';
+  document.getElementById('uploadProgress').style.display = 'none';
+}
+
+function clearFile() {
+  selectedFile = null;
+  document.getElementById('fileInfo').style.display = 'none';
+  document.getElementById('fileInput').value = '';
+}
+
+// ── SAVE CLOUDINARY CONFIG ──
+function saveCloudinaryConfig() {
+  const cn = document.getElementById('cld-cloud-name').value.trim();
+  const pr = document.getElementById('cld-preset').value.trim();
+  if (!cn || !pr) { showToast('Completa Cloud Name y Upload Preset', 'error'); return; }
+  localStorage.setItem('cld_cloud_name', cn);
+  localStorage.setItem('cld_preset', pr);
+  const status = document.getElementById('cldConfigStatus');
+  status.style.display = 'block';
+  status.innerHTML = `<div class="d-flex align-items-center gap-2 p-2" style="background:rgba(16,185,129,0.08);border:1px solid rgba(16,185,129,0.25);border-radius:var(--radius-sm)">
+    <i class="fa-solid fa-circle-check" style="color:var(--green)"></i>
+    <span style="font-size:0.8rem;color:var(--green);font-weight:600">Configuración guardada · Cloud: <strong>${cn}</strong></span>
+  </div>`;
+  showToast('Configuración de Cloudinary guardada', 'success');
+}
+
+// ── REAL CLOUDINARY UPLOAD ──
+async function uploadToCloudinary() {
+  if (!selectedFile) { showToast('Selecciona un archivo primero', 'error'); return; }
+
+  // Load saved config (or read from inputs)
+  const cloudName = localStorage.getItem('cld_cloud_name') || document.getElementById('cld-cloud-name').value.trim();
+  const uploadPreset = localStorage.getItem('cld_preset') || document.getElementById('cld-preset').value.trim();
+
+  if (!cloudName || !uploadPreset) {
+    showToast('Configura tu Cloud Name y Upload Preset primero', 'error');
+    // Scroll to config panel
+    document.getElementById('cld-cloud-name').focus();
+    return;
+  }
+
+  // Show progress UI
+  const progressWrap = document.getElementById('uploadProgress');
+  const progressBar = document.getElementById('progressBar');
+  const statusText = document.getElementById('uploadStatusText');
+  const pctEl = document.getElementById('uploadPct');
+  const uploadBtn = document.getElementById('uploadBtn');
+
+  progressWrap.style.display = 'block';
+  uploadBtn.disabled = true;
+  uploadBtn.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> Subiendo...';
+
+  // Build FormData
+  // Cloudinary accepts: raw (PDF, MP3), image, video, auto
+  const resourceType = selectedFile.type.startsWith('image/') ? 'image' : 'raw';
+  const endpoint = `https://api.cloudinary.com/v1_1/${cloudName}/${resourceType}/upload`;
+
+  const formData = new FormData();
+  formData.append('file', selectedFile);
+  formData.append('upload_preset', uploadPreset);
+  // Optional: add a folder
+  formData.append('folder', 'qr-studio-uploads');
+
+  try {
+    // Use XMLHttpRequest for real upload progress tracking
+    const secureURL = await new Promise((resolve, reject) => {
+      const xhr = new XMLHttpRequest();
+
+      // Track upload progress
+      xhr.upload.addEventListener('progress', (e) => {
+        if (e.lengthComputable) {
+          const pct = Math.round((e.loaded / e.total) * 100);
+          progressBar.style.width = pct + '%';
+          pctEl.textContent = pct + '%';
+          statusText.textContent = pct < 100 ? 'Subiendo archivo...' : 'Procesando en Cloudinary...';
+        }
+      });
+
+      xhr.addEventListener('load', () => {
+        if (xhr.status === 200) {
+          const res = JSON.parse(xhr.responseText);
+          // For raw files (PDF, MP3), Cloudinary returns secure_url pointing to the file
+          resolve(res.secure_url);
+        } else {
+          const errRes = JSON.parse(xhr.responseText || '{}');
+          reject(new Error(errRes?.error?.message || `Error ${xhr.status}`));
+        }
+      });
+
+      xhr.addEventListener('error', () => reject(new Error('Error de red al conectar con Cloudinary')));
+      xhr.open('POST', endpoint);
+      xhr.send(formData);
+    });
+
+    // Success!
+    progressBar.style.width = '100%';
+    pctEl.textContent = '100%';
+    statusText.textContent = '¡Subida completada!';
+
+    document.getElementById('uploadedURL').textContent = secureURL;
+    document.getElementById('uploadResult').style.display = 'block';
+
+    // Auto-switch to generator tab and build QR
+    document.querySelector('[data-bs-target="#tabGen"]').click();
+    setType('url', document.querySelector('[data-type="url"]'));
+    document.getElementById('f-url').value = secureURL;
+    setTimeout(generateQR, 200);
+
+    showToast('Archivo subido · QR generado con la URL real', 'success');
+
+  } catch(err) {
+    showToast('Error: ' + err.message, 'error');
+    progressWrap.style.display = 'none';
+  } finally {
+    uploadBtn.disabled = false;
+    uploadBtn.innerHTML = '<i class="fa-solid fa-cloud-arrow-up"></i> Subir a Cloudinary y generar QR';
+  }
+}
+
+// Load saved Cloudinary config on page init
+function loadCloudinaryConfig() {
+  const cn = localStorage.getItem('cld_cloud_name');
+  const pr = localStorage.getItem('cld_preset');
+  if (cn) document.getElementById('cld-cloud-name').value = cn;
+  if (pr) document.getElementById('cld-preset').value = pr;
+  if (cn && pr) {
+    const status = document.getElementById('cldConfigStatus');
+    status.style.display = 'block';
+    status.innerHTML = `<div class="d-flex align-items-center gap-2 p-2" style="background:rgba(16,185,129,0.08);border:1px solid rgba(16,185,129,0.25);border-radius:var(--radius-sm)">
+      <i class="fa-solid fa-circle-check" style="color:var(--green)"></i>
+      <span style="font-size:0.8rem;color:var(--green);font-weight:600">Configuración cargada · Cloud: <strong>${cn}</strong></span>
+    </div>`;
+  }
+}
+
+// ── TOAST ──
+function showToast(msg, type = 'success') {
+  const container = document.getElementById('toastContainer');
+  const toast = document.createElement('div');
+  const icon = type === 'success' ? 'fa-circle-check' : 'fa-circle-exclamation';
+  const color = type === 'success' ? 'var(--green)' : 'var(--red)';
+  toast.className = `my-toast ${type}`;
+  toast.innerHTML = `<i class="fa-solid ${icon}" style="color:${color}"></i>${msg}`;
+  container.appendChild(toast);
+  setTimeout(() => { toast.style.opacity='0'; toast.style.transform='translateY(12px)'; setTimeout(()=>toast.remove(), 300); }, 2800);
+}
+
+// ── MODALES LEGALES ──
+function openModal(id) {
+  document.getElementById(id).classList.add('open');
+  document.body.style.overflow = 'hidden';
+}
+function closeModal(id) {
+  document.getElementById(id).classList.remove('open');
+  document.body.style.overflow = '';
+}
+function closeModalOutside(e, id) {
+  if (e.target.id === id) closeModal(id);
+}
+// Cerrar con tecla Escape
+document.addEventListener('keydown', e => {
+  if (e.key === 'Escape') {
+    document.querySelectorAll('.legal-modal-overlay.open').forEach(m => {
+      m.classList.remove('open');
+      document.body.style.overflow = '';
+    });
+  }
+});
+
+// ── INIT ──
+renderHistory();
+loadCloudinaryConfig();
+</script>
+</body>
+</html>
