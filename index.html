@@ -19,7 +19,11 @@
     script-src 'self' 'unsafe-inline'
       https://cdn.jsdelivr.net
       https://cdnjs.cloudflare.com
-      https://unpkg.com;
+      https://unpkg.com
+      https://pagead2.googlesyndication.com
+      https://adservice.google.com
+      https://www.googletagservices.com
+      https://partner.googleadservices.com;
     style-src 'self' 'unsafe-inline'
       https://cdn.jsdelivr.net
       https://cdnjs.cloudflare.com
@@ -28,15 +32,27 @@
       https://fonts.gstatic.com
       https://cdnjs.cloudflare.com;
     img-src 'self' data: blob:
-      https://res.cloudinary.com;
+      https://res.cloudinary.com
+      https://pagead2.googlesyndication.com
+      https://tpc.googlesyndication.com
+      https://*.googlesyndication.com
+      https://*.googleadservices.com;
     connect-src 'self'
-      https://api.cloudinary.com;
-    frame-src 'none';
+      https://api.cloudinary.com
+      https://pagead2.googlesyndication.com
+      https://adservice.google.com;
+    frame-src
+      https://googleads.g.doubleclick.net
+      https://tpc.googlesyndication.com;
     object-src 'none';
     base-uri 'self';
     form-action 'self';
   " />
 
+
+  <!-- ══ GOOGLE ADSENSE ══ -->
+  <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-4840435026334863"
+       crossorigin="anonymous"></script>
   <!-- Bootstrap 5 -->
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet" />
   <!-- FontAwesome -->
@@ -388,8 +404,14 @@
 
 <!-- ═══ AD HEADER ═══ -->
 <div class="container">
-  <div class="ad-zone ad-header">
-    <i class="fa-regular fa-rectangle-ad"></i> ANUNCIO AQUÍ — 728×90 Leaderboard
+  <div class="ad-zone ad-header" style="border:none;background:transparent;height:auto;min-height:90px">
+    <ins class="adsbygoogle"
+       style="display:block"
+       data-ad-client="ca-pub-4840435026334863"
+       data-ad-slot="1234567890"
+       data-ad-format="horizontal"
+       data-full-width-responsive="true"></ins>
+<script>(adsbygoogle = window.adsbygoogle || []).push({});</script>
   </div>
 </div>
 
@@ -542,8 +564,14 @@
           </div>
 
           <!-- AD INLINE -->
-          <div class="ad-zone ad-inline">
-            <i class="fa-regular fa-rectangle-ad"></i> ANUNCIO AQUÍ — 728×90 Debajo del formulario
+          <div class="ad-zone ad-inline" style="border:none;background:transparent;height:auto;min-height:90px">
+            <ins class="adsbygoogle"
+       style="display:block"
+       data-ad-client="ca-pub-4840435026334863"
+       data-ad-slot="1234567891"
+       data-ad-format="horizontal"
+       data-full-width-responsive="true"></ins>
+<script>(adsbygoogle = window.adsbygoogle || []).push({});</script>
           </div>
 
           <!-- Personalización -->
@@ -752,8 +780,14 @@
     <div class="col-lg-4">
 
       <!-- AD SIDEBAR -->
-      <div class="ad-zone ad-sidebar">
-        <i class="fa-regular fa-rectangle-ad"></i> ANUNCIO AQUÍ — 300×250 Sidebar
+      <div class="ad-zone ad-sidebar" style="border:none;background:transparent;height:auto;min-height:250px">
+        <ins class="adsbygoogle"
+       style="display:block"
+       data-ad-client="ca-pub-4840435026334863"
+       data-ad-slot="1234567892"
+       data-ad-format="rectangle"
+       ></ins>
+<script>(adsbygoogle = window.adsbygoogle || []).push({});</script>
       </div>
 
       <!-- HISTORIAL -->
@@ -811,8 +845,14 @@
     </div>
 
     <div class="col-lg-4">
-      <div class="ad-zone" style="height:280px;margin-bottom:1rem">
-        <i class="fa-regular fa-rectangle-ad"></i> ANUNCIO AQUÍ — 300×280
+      <div class="ad-zone" style="border:none;background:transparent;height:auto;min-height:250px;margin-bottom:1rem">
+        <ins class="adsbygoogle"
+       style="display:block"
+       data-ad-client="ca-pub-4840435026334863"
+       data-ad-slot="1234567893"
+       data-ad-format="rectangle"
+       ></ins>
+<script>(adsbygoogle = window.adsbygoogle || []).push({});</script>
       </div>
     </div>
   </div>
@@ -1889,7 +1929,7 @@ function closeModalOutside(e, id) {
   if (e.target.id === id) closeModal(id);
 }
 function closeModal(id) {
-  document.Id(id).classList.remove('open');
+  document.getElementById(id).classList.remove('open');
   document.body.style.overflow = '';
 }
 document.addEventListener('keydown', function(e) {
