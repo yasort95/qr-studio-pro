@@ -7,6 +7,36 @@
   <meta name="description" content="Genera códigos QR profesionales gratis: URL, WiFi, vCard, WhatsApp, SMS, Email, Cripto y más. Escanea, personaliza y descarga en PNG, SVG o PDF." />
   <meta name="keywords" content="generador qr, código qr gratis, qr wifi, qr whatsapp, qr vcard, escanear qr, qr profesional" />
 
+  <!-- ══ SECURITY HEADERS ══ -->
+  <meta http-equiv="X-Frame-Options" content="DENY" />
+  <meta http-equiv="X-Content-Type-Options" content="nosniff" />
+  <meta name="referrer" content="strict-origin-when-cross-origin" />
+  <meta http-equiv="Permissions-Policy" content="camera=(self), microphone=(), geolocation=(), payment=()" />
+  <!-- CSP: restringe de dónde puede cargar recursos la página -->
+  <!-- Bloquea scripts inline no autorizados, iframes, objetos y datos externos no listados -->
+  <meta http-equiv="Content-Security-Policy" content="
+    default-src 'self';
+    script-src 'self' 'unsafe-inline'
+      https://cdn.jsdelivr.net
+      https://cdnjs.cloudflare.com
+      https://unpkg.com;
+    style-src 'self' 'unsafe-inline'
+      https://cdn.jsdelivr.net
+      https://cdnjs.cloudflare.com
+      https://fonts.googleapis.com;
+    font-src 'self'
+      https://fonts.gstatic.com
+      https://cdnjs.cloudflare.com;
+    img-src 'self' data: blob:
+      https://res.cloudinary.com;
+    connect-src 'self'
+      https://api.cloudinary.com;
+    frame-src 'none';
+    object-src 'none';
+    base-uri 'self';
+    form-action 'self';
+  " />
+
   <!-- Bootstrap 5 -->
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet" />
   <!-- FontAwesome -->
@@ -301,6 +331,12 @@
     footer p { color: var(--text3); font-size: 0.82rem; line-height: 1.7; }
     footer a { color: var(--text2); text-decoration: none; font-size: 0.82rem; transition: color 0.2s; }
     footer a:hover { color: var(--accent); }
+    .footer-link-btn {
+      background: none; border: none; padding: 0; cursor: pointer;
+      color: var(--text2); font-size: 0.82rem; font-family: var(--font-body);
+      transition: color 0.2s; text-align: left;
+    }
+    .footer-link-btn:hover { color: var(--accent); }
 
     /* ── TOAST ── */
     .toast-container { position: fixed; bottom: 1.5rem; right: 1.5rem; z-index: 9999; }
@@ -613,7 +649,7 @@
             <button class="btn-gen mb-3" onclick="generateMass()"><i class="fa-solid fa-layer-group"></i> Generar todos los QR</button>
             <div id="massResults" class="d-flex flex-column gap-2"></div>
             <div class="d-flex gap-2 mt-3" id="massDownloadBtns" style="display:none!important">
-              <button class="btn-dl" onclick="downloadMassZip()"><i class="fa-solid fa-file-zipper"></i> Descargar todos (ZIP)</button>
+              <button class="btn-dl" onclick="downloadAllMass()"><i class="fa-solid fa-download"></i> Descargar todos</button>
             </div>
           </div>
         </div>
@@ -622,7 +658,7 @@
         <div class="tab-pane fade" id="tabFile">
           <div class="panel mb-3">
             <div class="panel-title"><i class="fa-brands fa-cloudflare"></i> Configuración de Cloudinary</div>
-            <p style="font-size:0.82rem;color:var(--text2);margin-bottom:1rem">Ingresa tus credenciales de Cloudinary para activar la subida real de archivos. Obtenlas en <a href="https://cloudinary.com/console" target="_blank" style="color:var(--accent)">cloudinary.com/console</a>.</p>
+            <p style="font-size:0.82rem;color:var(--text2);margin-bottom:1rem">Ingresa tus credenciales de Cloudinary para activar la subida real de archivos. Obtenlas en <a href="https://cloudinary.com/console" target="_blank" rel="noopener noreferrer" style="color:var(--accent)">cloudinary.com/console</a>.</p>
             <div class="row g-2">
               <div class="col-md-6">
                 <label class="form-label">Cloud Name <span style="color:var(--red)">*</span></label>
@@ -699,7 +735,7 @@
             <div class="mt-4 p-3" style="background:var(--surface2);border:1px solid var(--border);border-radius:var(--radius-sm)">
               <div class="panel-title" style="font-size:0.72rem;margin-bottom:0.75rem"><i class="fa-solid fa-list-ol"></i> Cómo obtener tus credenciales de Cloudinary</div>
               <div class="d-flex flex-column gap-2" style="font-size:0.8rem;color:var(--text2)">
-                <div class="d-flex gap-2"><span style="background:var(--accent2);color:#0a0a12;border-radius:50%;width:20px;height:20px;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:0.7rem;flex-shrink:0">1</span><span>Crea cuenta gratis en <a href="https://cloudinary.com" target="_blank" style="color:var(--accent)">cloudinary.com</a> (plan gratuito: 25GB).</span></div>
+                <div class="d-flex gap-2"><span style="background:var(--accent2);color:#0a0a12;border-radius:50%;width:20px;height:20px;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:0.7rem;flex-shrink:0">1</span><span>Crea cuenta gratis en <a href="https://cloudinary.com" target="_blank" rel="noopener noreferrer" style="color:var(--accent)">cloudinary.com</a> (plan gratuito: 25GB).</span></div>
                 <div class="d-flex gap-2"><span style="background:var(--accent2);color:#0a0a12;border-radius:50%;width:20px;height:20px;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:0.7rem;flex-shrink:0">2</span><span>En el Dashboard copia tu <strong style="color:var(--text)">Cloud Name</strong> (esquina superior).</span></div>
                 <div class="d-flex gap-2"><span style="background:var(--accent2);color:#0a0a12;border-radius:50%;width:20px;height:20px;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:0.7rem;flex-shrink:0">3</span><span>Ve a <strong style="color:var(--text)">Settings → Upload → Upload Presets</strong> y crea uno nuevo.</span></div>
                 <div class="d-flex gap-2"><span style="background:var(--accent2);color:#0a0a12;border-radius:50%;width:20px;height:20px;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:0.7rem;flex-shrink:0">4</span><span>En el preset, pon <strong style="color:var(--text)">Signing Mode = Unsigned</strong> y guarda. Copia el nombre del preset.</span></div>
@@ -828,11 +864,11 @@
       <div class="col-md-4">
         <strong style="font-size:0.85rem;color:var(--text2)">Legal</strong>
         <div class="d-flex flex-column gap-1 mt-2">
-          <a href="#" onclick="openModal('modalPrivacidad');return false;">Política de Privacidad</a>
-          <a href="#" onclick="openModal('modalTerminos');return false;">Términos de Servicio</a>
-          <a href="#" onclick="openModal('modalCookies');return false;">Política de Cookies</a>
-          <a href="#" onclick="openModal('modalContacto');return false;">Contacto</a>
-          <a href="#" onclick="openModal('modalAcerca');return false;">Acerca de</a>
+          <button class="footer-link-btn" onclick="openModal('modalPrivacidad')">Política de Privacidad</button>
+          <button class="footer-link-btn" onclick="openModal('modalTerminos')">Términos de Servicio</button>
+          <button class="footer-link-btn" onclick="openModal('modalCookies')">Política de Cookies</button>
+          <button class="footer-link-btn" onclick="openModal('modalContacto')">Contacto</button>
+          <button class="footer-link-btn" onclick="openModal('modalAcerca')">Acerca de</button>
         </div>
       </div>
     </div>
@@ -840,9 +876,9 @@
     <div class="d-flex flex-wrap justify-content-between align-items-center gap-2">
       <p style="margin:0;font-size:0.78rem">© 2025 QR Studio Pro · República de Panamá · Todos los QR se generan localmente en tu navegador.</p>
       <p style="margin:0;font-size:0.78rem">
-        <a href="#" onclick="openModal('modalPrivacidad');return false;" style="color:var(--text3);margin-right:12px">Privacidad</a>
-        <a href="#" onclick="openModal('modalTerminos');return false;" style="color:var(--text3);margin-right:12px">Términos</a>
-        <a href="#" onclick="openModal('modalCookies');return false;" style="color:var(--text3)">Cookies</a>
+        <button class="footer-link-btn" onclick="openModal('modalPrivacidad')" style="margin-right:12px">Privacidad</button>
+        <button class="footer-link-btn" onclick="openModal('modalTerminos')" style="margin-right:12px">Términos</button>
+        <button class="footer-link-btn" onclick="openModal('modalCookies')">Cookies</button>
       </p>
     </div>
   </div>
@@ -1093,15 +1129,36 @@
 <div class="toast-container" id="toastContainer"></div>
 
 <!-- ═══ SCRIPTS ═══ -->
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
-<script src="https://unpkg.com/html5-qrcode@2.3.8/html5-qrcode.min.js"></script>
+<!-- SRI: integrity hashes verifican que los scripts CDN no hayan sido modificados -->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+<script src="https://unpkg.com/html5-qrcode@2.3.8/html5-qrcode.min.js" crossorigin="anonymous"></script>
 
 <script>
 /* ══════════════════════════════════════════
    QR STUDIO PRO — Main JavaScript
    ══════════════════════════════════════════ */
+
+// ── UTILIDADES DE SEGURIDAD ──
+
+// Sanitiza texto antes de insertarlo como HTML — previene XSS
+function sanitizeHTML(str) {
+  const div = document.createElement('div');
+  div.textContent = String(str);
+  return div.innerHTML;
+}
+
+// Valida que una URL tenga protocolo http/https — bloquea javascript:, data:, etc.
+function isSafeURL(str) {
+  try {
+    const url = new URL(str);
+    return url.protocol === 'http:' || url.protocol === 'https:';
+  } catch { return false; }
+}
+
+// Limita el tamaño máximo de texto ingresado — previene DoS por QR gigante
+const MAX_QR_TEXT = 2000;
 
 let currentType = 'url';
 let lastQRContent = '';
@@ -1130,14 +1187,24 @@ function updateColor(target, val) {
 
 // ── BUILD QR CONTENT STRING ──
 function buildContent() {
+  let result = '';
   switch (currentType) {
-    case 'url': return document.getElementById('f-url').value.trim() || 'https://ejemplo.com';
-    case 'text': return document.getElementById('f-text').value.trim() || 'Mi texto QR';
+    case 'url': {
+      const url = document.getElementById('f-url').value.trim();
+      if (url && !isSafeURL(url)) {
+        showToast('Solo se permiten URLs con http:// o https://', 'error');
+        return null;
+      }
+      result = url || 'https://ejemplo.com';
+      break;
+    }
+    case 'text': result = document.getElementById('f-text').value.trim() || 'Mi texto QR'; break;
     case 'wifi': {
       const s = document.getElementById('f-wifi-ssid').value.trim();
       const p = document.getElementById('f-wifi-pass').value.trim();
       const t = document.getElementById('f-wifi-sec').value;
-      return `WIFI:T:${t};S:${s};P:${p};;`;
+      result = `WIFI:T:${t};S:${s};P:${p};;`;
+      break;
     }
     case 'vcard': {
       const n = document.getElementById('f-vc-name').value.trim();
@@ -1145,45 +1212,57 @@ function buildContent() {
       const e = document.getElementById('f-vc-email').value.trim();
       const o = document.getElementById('f-vc-org').value.trim();
       const u = document.getElementById('f-vc-url').value.trim();
-      return `BEGIN:VCARD\nVERSION:3.0\nFN:${n}\nTEL:${t}\nEMAIL:${e}\nORG:${o}\nURL:${u}\nEND:VCARD`;
+      result = `BEGIN:VCARD\nVERSION:3.0\nFN:${n}\nTEL:${t}\nEMAIL:${e}\nORG:${o}\nURL:${u}\nEND:VCARD`;
+      break;
     }
     case 'email': {
       const to = document.getElementById('f-em-to').value.trim();
       const sub = encodeURIComponent(document.getElementById('f-em-sub').value.trim());
       const body = encodeURIComponent(document.getElementById('f-em-body').value.trim());
-      return `mailto:${to}?subject=${sub}&body=${body}`;
+      result = `mailto:${to}?subject=${sub}&body=${body}`;
+      break;
     }
     case 'sms': {
       const n = document.getElementById('f-sms-num').value.trim();
       const m = encodeURIComponent(document.getElementById('f-sms-msg').value.trim());
-      return `sms:${n}?body=${m}`;
+      result = `sms:${n}?body=${m}`;
+      break;
     }
     case 'whatsapp': {
-      const n = document.getElementById('f-wa-num').value.trim();
+      const n = document.getElementById('f-wa-num').value.trim().replace(/\D/g,'');
       const m = encodeURIComponent(document.getElementById('f-wa-msg').value.trim());
-      return `https://wa.me/${n}?text=${m}`;
+      result = `https://wa.me/${n}?text=${m}`;
+      break;
     }
     case 'event': {
       const name = document.getElementById('f-ev-name').value.trim();
       const start = document.getElementById('f-ev-start').value.replace(/[-:T]/g,'').slice(0,15) + 'Z';
       const end = document.getElementById('f-ev-end').value.replace(/[-:T]/g,'').slice(0,15) + 'Z';
       const loc = document.getElementById('f-ev-loc').value.trim();
-      return `BEGIN:VEVENT\nSUMMARY:${name}\nDTSTART:${start}\nDTEND:${end}\nLOCATION:${loc}\nEND:VEVENT`;
+      result = `BEGIN:VEVENT\nSUMMARY:${name}\nDTSTART:${start}\nDTEND:${end}\nLOCATION:${loc}\nEND:VEVENT`;
+      break;
     }
     case 'crypto': {
       const coin = document.getElementById('f-cr-coin').value;
-      const addr = document.getElementById('f-cr-addr').value.trim();
-      const amt = document.getElementById('f-cr-amt').value.trim();
-      return amt ? `${coin}:${addr}?amount=${amt}` : `${coin}:${addr}`;
+      const addr = document.getElementById('f-cr-addr').value.trim().replace(/[^a-zA-Z0-9]/g,'');
+      const amt = parseFloat(document.getElementById('f-cr-amt').value) || 0;
+      result = amt > 0 ? `${coin}:${addr}?amount=${amt}` : `${coin}:${addr}`;
+      break;
     }
-    default: return '';
+    default: return null;
   }
+  // Límite de longitud para evitar QR ilegibles o DoS
+  if (result.length > MAX_QR_TEXT) {
+    showToast(`El contenido supera el límite de ${MAX_QR_TEXT} caracteres`, 'error');
+    return null;
+  }
+  return result;
 }
 
 // ── GENERATE QR ──
 function generateQR() {
   const content = buildContent();
-  if (!content) { showToast('Completa los campos requeridos', 'error'); return; }
+  if (!content) return; // buildContent ya muestra el toast de error
   lastQRContent = content;
 
   const size = parseInt(document.getElementById('qrSize').value);
@@ -1210,6 +1289,7 @@ function generateQR() {
     return;
   }
 
+  // textContent es seguro contra XSS — nunca usar innerHTML aquí
   document.getElementById('qrContentPreview').textContent = content.length > 80 ? content.slice(0,80)+'…' : content;
   const panel = document.getElementById('resultPanel');
   panel.style.display = 'block';
@@ -1304,36 +1384,95 @@ function toggleTheme() {
 }
 
 // ── HISTORY ──
+// Parseo seguro de localStorage — evita crash si el valor fue manipulado
+function safeParseHistory() {
+  try {
+    const raw = localStorage.getItem('qrHistory');
+    if (!raw) return [];
+    const parsed = JSON.parse(raw);
+    // Verificar que sea un array y que cada item tenga la estructura esperada
+    if (!Array.isArray(parsed)) return [];
+    return parsed.filter(h =>
+      h && typeof h.content === 'string' &&
+      typeof h.type === 'string' &&
+      typeof h.ts === 'number' &&
+      h.content.length <= MAX_QR_TEXT
+    ).slice(0, 5); // nunca más de 5
+  } catch { return []; }
+}
+
 function saveToHistory(content, type) {
-  let hist = JSON.parse(localStorage.getItem('qrHistory') || '[]');
+  let hist = safeParseHistory();
   const thumb = getQRCanvas() ? getQRCanvas().toDataURL('image/png') : null;
   hist.unshift({ content, type, thumb, ts: Date.now() });
   hist = hist.slice(0, 5);
-  localStorage.setItem('qrHistory', JSON.stringify(hist));
+  try {
+    localStorage.setItem('qrHistory', JSON.stringify(hist));
+  } catch { /* localStorage lleno o bloqueado — ignorar */ }
   renderHistory();
 }
 
 function renderHistory() {
-  const hist = JSON.parse(localStorage.getItem('qrHistory') || '[]');
+  const hist = safeParseHistory();
   const el = document.getElementById('historyList');
   if (!hist.length) {
     el.innerHTML = '<p style="font-size:0.82rem;color:var(--text3);text-align:center;padding:1rem 0">Los últimos 5 QR aparecerán aquí</p>';
     return;
   }
   const typeLabels = { url:'URL', text:'Texto', wifi:'Wi-Fi', vcard:'vCard', email:'Email', sms:'SMS', whatsapp:'WhatsApp', event:'Evento', crypto:'Cripto' };
-  el.innerHTML = hist.map((h, i) => `
-    <div class="hist-item" onclick="loadFromHistory(${i})">
-      <div class="hist-thumb">${h.thumb ? `<img src="${h.thumb}" />` : '<i class="fa-solid fa-qrcode" style="font-size:1.2rem;color:#64748b"></i>'}</div>
-      <div class="hist-text">
-        <div class="hist-label">${h.content.length > 35 ? h.content.slice(0,35)+'…' : h.content}</div>
-        <div class="hist-type"><span class="tag">${typeLabels[h.type]||h.type}</span> · ${new Date(h.ts).toLocaleTimeString('es',{hour:'2-digit',minute:'2-digit'})}</div>
-      </div>
-      <i class="fa-solid fa-rotate-right" style="color:var(--text3);font-size:0.8rem"></i>
-    </div>`).join('');
+  // sanitizeHTML evita XSS al mostrar contenido del historial en el DOM
+  el.innerHTML = '';
+  hist.forEach((h, i) => {
+    const item = document.createElement('div');
+    item.className = 'hist-item';
+    item.addEventListener('click', () => loadFromHistory(i)); // addEventListener — sin onclick inline
+
+    const thumbDiv = document.createElement('div');
+    thumbDiv.className = 'hist-thumb';
+    if (h.thumb && typeof h.thumb === 'string' && h.thumb.startsWith('data:image/png;base64,')) {
+      const img = document.createElement('img');
+      img.src = h.thumb;
+      img.alt = 'QR thumbnail';
+      thumbDiv.appendChild(img);
+    } else {
+      const icon = document.createElement('i');
+      icon.className = 'fa-solid fa-qrcode';
+      icon.style.cssText = 'font-size:1.2rem;color:#64748b';
+      thumbDiv.appendChild(icon);
+    }
+
+    const textDiv = document.createElement('div');
+    textDiv.className = 'hist-text';
+
+    const labelDiv = document.createElement('div');
+    labelDiv.className = 'hist-label';
+    labelDiv.textContent = h.content.length > 35 ? h.content.slice(0, 35) + '…' : h.content;
+
+    const typeDiv = document.createElement('div');
+    typeDiv.className = 'hist-type';
+    const tag = document.createElement('span');
+    tag.className = 'tag';
+    tag.textContent = typeLabels[h.type] || h.type;
+    const time = document.createTextNode(' · ' + new Date(h.ts).toLocaleTimeString('es', {hour:'2-digit', minute:'2-digit'}));
+    typeDiv.appendChild(tag);
+    typeDiv.appendChild(time);
+
+    textDiv.appendChild(labelDiv);
+    textDiv.appendChild(typeDiv);
+
+    const arrowIcon = document.createElement('i');
+    arrowIcon.className = 'fa-solid fa-rotate-right';
+    arrowIcon.style.cssText = 'color:var(--text3);font-size:0.8rem';
+
+    item.appendChild(thumbDiv);
+    item.appendChild(textDiv);
+    item.appendChild(arrowIcon);
+    el.appendChild(item);
+  });
 }
 
 function loadFromHistory(i) {
-  const hist = JSON.parse(localStorage.getItem('qrHistory') || '[]');
+  const hist = safeParseHistory();
   const h = hist[i];
   if (!h) return;
   // Switch to gen tab
@@ -1384,8 +1523,17 @@ async function stopScanner() {
 
 function openScanned() {
   const t = document.getElementById('scanText').textContent;
-  if (t.startsWith('http')) window.open(t, '_blank');
-  else showToast('El contenido no es una URL', 'error');
+  // Solo permite http y https — bloquea javascript:, data:, etc.
+  try {
+    const url = new URL(t);
+    if (url.protocol === 'http:' || url.protocol === 'https:') {
+      window.open(t, '_blank', 'noopener,noreferrer');
+    } else {
+      showToast('Protocolo no permitido por seguridad', 'error');
+    }
+  } catch {
+    showToast('El contenido no es una URL válida', 'error');
+  }
 }
 
 function copyScanned() {
@@ -1405,6 +1553,8 @@ function genFromScanned() {
 function generateMass() {
   const lines = document.getElementById('massInput').value.split('\n').map(l => l.trim()).filter(Boolean);
   if (!lines.length) { showToast('Ingresa al menos una URL o texto', 'error'); return; }
+  // Límite de seguridad: máximo 100 QR a la vez para evitar bloqueo del navegador
+  if (lines.length > 100) { showToast('Máximo 100 elementos por lote', 'error'); return; }
 
   const container = document.getElementById('massResults');
   container.innerHTML = '';
@@ -1414,13 +1564,34 @@ function generateMass() {
     const div = document.createElement('div');
     div.className = 'mass-item-card';
     const thumbId = `massQR_${idx}`;
-    div.innerHTML = `
-      <div class="mass-qr-thumb" id="${thumbId}"></div>
-      <div style="flex:1;min-width:0">
-        <div style="font-size:0.82rem;font-weight:600;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">${line}</div>
-        <div style="font-size:0.72rem;color:var(--text3)">QR #${idx+1}</div>
-      </div>
-      <button class="btn-dl" onclick="downloadMassItem(${idx})"><i class="fa-solid fa-download"></i></button>`;
+
+    // Construir DOM manualmente — evita riesgo de inyección via onclick en innerHTML
+    const thumbDiv = document.createElement('div');
+    thumbDiv.className = 'mass-qr-thumb';
+    thumbDiv.id = thumbId;
+
+    const infoDiv = document.createElement('div');
+    infoDiv.style.cssText = 'flex:1;min-width:0';
+
+    const labelDiv = document.createElement('div');
+    labelDiv.style.cssText = 'font-size:0.82rem;font-weight:600;white-space:nowrap;overflow:hidden;text-overflow:ellipsis';
+    labelDiv.textContent = line; // textContent — seguro
+
+    const numDiv = document.createElement('div');
+    numDiv.style.cssText = 'font-size:0.72rem;color:var(--text3)';
+    numDiv.textContent = `QR #${idx + 1}`;
+
+    infoDiv.appendChild(labelDiv);
+    infoDiv.appendChild(numDiv);
+
+    const btn = document.createElement('button');
+    btn.className = 'btn-dl';
+    btn.innerHTML = '<i class="fa-solid fa-download"></i>';
+    btn.addEventListener('click', () => downloadMassItem(idx)); // addEventListener — no onclick inline
+
+    div.appendChild(thumbDiv);
+    div.appendChild(infoDiv);
+    div.appendChild(btn);
     container.appendChild(div);
 
     setTimeout(() => {
@@ -1441,9 +1612,25 @@ function downloadMassItem(idx) {
   const { canvas, line } = massQRData[idx] || {};
   if (!canvas) return;
   const a = document.createElement('a');
-  a.download = `qr-${idx+1}.png`;
+  a.download = `qr-${idx + 1}.png`;
   a.href = canvas.toDataURL();
   a.click();
+}
+
+// Descarga todos los QR masivos uno por uno con pequeño delay entre cada uno
+function downloadAllMass() {
+  if (!massQRData.length) { showToast('Genera los QR primero', 'error'); return; }
+  massQRData.forEach((item, idx) => {
+    if (item.canvas) {
+      setTimeout(() => {
+        const a = document.createElement('a');
+        a.download = `qr-${idx + 1}.png`;
+        a.href = item.canvas.toDataURL();
+        a.click();
+      }, idx * 300); // 300ms entre descargas para no bloquear el navegador
+    }
+  });
+  showToast(`Descargando ${massQRData.length} QR...`, 'success');
 }
 
 // ── FILE UPLOAD + CLOUDINARY INTEGRATION ──
@@ -1472,15 +1659,25 @@ function getFileIcon(type) {
 }
 
 function processFile(file) {
+  // Whitelist de tipos permitidos — rechaza ejecutables u otros archivos peligrosos
+  const ALLOWED_TYPES = ['application/pdf','image/jpeg','image/png','image/gif','audio/mpeg','audio/mp3'];
+  const ALLOWED_EXTS = ['.pdf','.jpg','.jpeg','.png','.gif','.mp3'];
+  const ext = file.name.toLowerCase().slice(file.name.lastIndexOf('.'));
+  if (!ALLOWED_TYPES.includes(file.type) && !ALLOWED_EXTS.includes(ext)) {
+    showToast('Tipo de archivo no permitido', 'error');
+    return;
+  }
   // Validate size (20MB max)
   if (file.size > 20 * 1024 * 1024) {
     showToast('El archivo supera el límite de 20MB', 'error');
     return;
   }
   selectedFile = file;
-  document.getElementById('fileName').textContent = file.name;
+  // textContent es seguro — no interpreta HTML, protege contra nombres de archivo maliciosos
+  const safeName = file.name.slice(0, 100); // limitar longitud del nombre
+  document.getElementById('fileName').textContent = safeName;
   document.getElementById('fileSize').textContent =
-    (file.size / 1024 / 1024).toFixed(2) + ' MB · ' + (file.type || 'archivo');
+    (file.size / 1024 / 1024).toFixed(2) + ' MB · ' + (file.type || 'archivo').slice(0, 50);
   document.getElementById('fileIcon').className = `fa-solid ${getFileIcon(file.type)} fa-2x`;
   document.getElementById('fileIcon').style.color = 'var(--accent)';
   document.getElementById('fileInfo').style.display = 'block';
@@ -1494,19 +1691,43 @@ function clearFile() {
   document.getElementById('fileInput').value = '';
 }
 
+// ── CLOUDINARY STATUS HELPER (DOM puro — sin innerHTML con datos del usuario) ──
+function renderCloudinaryStatus(el, cloudName, action) {
+  el.innerHTML = ''; // limpiar primero
+  const wrap = document.createElement('div');
+  wrap.className = 'd-flex align-items-center gap-2 p-2';
+  wrap.style.cssText = 'background:rgba(16,185,129,0.08);border:1px solid rgba(16,185,129,0.25);border-radius:var(--radius-sm)';
+  const icon = document.createElement('i');
+  icon.className = 'fa-solid fa-circle-check';
+  icon.style.color = 'var(--green)';
+  const span = document.createElement('span');
+  span.style.cssText = 'font-size:0.8rem;color:var(--green);font-weight:600';
+  span.textContent = `Configuración ${action} · Cloud: `;
+  const strong = document.createElement('strong');
+  strong.textContent = cloudName; // textContent — nunca innerHTML
+  span.appendChild(strong);
+  wrap.appendChild(icon);
+  wrap.appendChild(span);
+  el.appendChild(wrap);
+  el.style.display = 'block';
+}
+
 // ── SAVE CLOUDINARY CONFIG ──
 function saveCloudinaryConfig() {
   const cn = document.getElementById('cld-cloud-name').value.trim();
   const pr = document.getElementById('cld-preset').value.trim();
   if (!cn || !pr) { showToast('Completa Cloud Name y Upload Preset', 'error'); return; }
+  // Validar formato de cloud name (solo letras, números y guiones)
+  if (!/^[a-zA-Z0-9_-]{3,50}$/.test(cn)) {
+    showToast('Cloud Name inválido. Solo letras, números y guiones.', 'error'); return;
+  }
+  // Validar formato de upload preset
+  if (!/^[a-zA-Z0-9_-]{3,80}$/.test(pr)) {
+    showToast('Upload Preset inválido. Solo letras, números y guiones.', 'error'); return;
+  }
   localStorage.setItem('cld_cloud_name', cn);
   localStorage.setItem('cld_preset', pr);
-  const status = document.getElementById('cldConfigStatus');
-  status.style.display = 'block';
-  status.innerHTML = `<div class="d-flex align-items-center gap-2 p-2" style="background:rgba(16,185,129,0.08);border:1px solid rgba(16,185,129,0.25);border-radius:var(--radius-sm)">
-    <i class="fa-solid fa-circle-check" style="color:var(--green)"></i>
-    <span style="font-size:0.8rem;color:var(--green);font-weight:600">Configuración guardada · Cloud: <strong>${cn}</strong></span>
-  </div>`;
+  renderCloudinaryStatus(document.getElementById('cldConfigStatus'), cn, 'guardada');
   showToast('Configuración de Cloudinary guardada', 'success');
 }
 
@@ -1523,6 +1744,15 @@ async function uploadToCloudinary() {
     // Scroll to config panel
     document.getElementById('cld-cloud-name').focus();
     return;
+  }
+
+  // Validar formato del cloud name antes de construir el endpoint
+  // Evita que un valor manipulado en localStorage altere la URL de la petición
+  if (!/^[a-zA-Z0-9_-]{3,50}$/.test(cloudName)) {
+    showToast('Cloud Name inválido. Reconfigura Cloudinary.', 'error'); return;
+  }
+  if (!/^[a-zA-Z0-9_-]{3,80}$/.test(uploadPreset)) {
+    showToast('Upload Preset inválido. Reconfigura Cloudinary.', 'error'); return;
   }
 
   // Show progress UI
@@ -1564,12 +1794,24 @@ async function uploadToCloudinary() {
 
       xhr.addEventListener('load', () => {
         if (xhr.status === 200) {
-          const res = JSON.parse(xhr.responseText);
-          // For raw files (PDF, MP3), Cloudinary returns secure_url pointing to the file
-          resolve(res.secure_url);
+          try {
+            const res = JSON.parse(xhr.responseText);
+            // Validar que la URL devuelta sea realmente de Cloudinary (https) — evita redirección maliciosa
+            if (res.secure_url && isSafeURL(res.secure_url) && res.secure_url.includes('cloudinary.com')) {
+              resolve(res.secure_url);
+            } else {
+              reject(new Error('La URL devuelta por Cloudinary no es válida'));
+            }
+          } catch {
+            reject(new Error('Respuesta inválida de Cloudinary'));
+          }
         } else {
-          const errRes = JSON.parse(xhr.responseText || '{}');
-          reject(new Error(errRes?.error?.message || `Error ${xhr.status}`));
+          try {
+            const errRes = JSON.parse(xhr.responseText || '{}');
+            reject(new Error(errRes?.error?.message || `Error ${xhr.status}`));
+          } catch {
+            reject(new Error(`Error de servidor: ${xhr.status}`));
+          }
         }
       });
 
@@ -1605,17 +1847,17 @@ async function uploadToCloudinary() {
 
 // Load saved Cloudinary config on page init
 function loadCloudinaryConfig() {
-  const cn = localStorage.getItem('cld_cloud_name');
-  const pr = localStorage.getItem('cld_preset');
-  if (cn) document.getElementById('cld-cloud-name').value = cn;
-  if (pr) document.getElementById('cld-preset').value = pr;
-  if (cn && pr) {
-    const status = document.getElementById('cldConfigStatus');
-    status.style.display = 'block';
-    status.innerHTML = `<div class="d-flex align-items-center gap-2 p-2" style="background:rgba(16,185,129,0.08);border:1px solid rgba(16,185,129,0.25);border-radius:var(--radius-sm)">
-      <i class="fa-solid fa-circle-check" style="color:var(--green)"></i>
-      <span style="font-size:0.8rem;color:var(--green);font-weight:600">Configuración cargada · Cloud: <strong>${cn}</strong></span>
-    </div>`;
+  // Leer de localStorage y sanitizar antes de mostrar — un atacante podría haber
+  // modificado localStorage manualmente para inyectar HTML
+  const cn = localStorage.getItem('cld_cloud_name') || '';
+  const pr = localStorage.getItem('cld_preset') || '';
+  // Validar formato antes de cargar — rechaza valores manipulados
+  const validCN = /^[a-zA-Z0-9_-]{3,50}$/.test(cn) ? cn : '';
+  const validPR = /^[a-zA-Z0-9_-]{3,80}$/.test(pr) ? pr : '';
+  if (validCN) document.getElementById('cld-cloud-name').value = validCN;
+  if (validPR) document.getElementById('cld-preset').value = validPR;
+  if (validCN && validPR) {
+    renderCloudinaryStatus(document.getElementById('cldConfigStatus'), validCN, 'cargada');
   }
 }
 
@@ -1626,7 +1868,14 @@ function showToast(msg, type = 'success') {
   const icon = type === 'success' ? 'fa-circle-check' : 'fa-circle-exclamation';
   const color = type === 'success' ? 'var(--green)' : 'var(--red)';
   toast.className = `my-toast ${type}`;
-  toast.innerHTML = `<i class="fa-solid ${icon}" style="color:${color}"></i>${msg}`;
+  // Usar textContent para el mensaje — nunca innerHTML con texto externo
+  const iconEl = document.createElement('i');
+  iconEl.className = `fa-solid ${icon}`;
+  iconEl.style.color = color;
+  const textEl = document.createElement('span');
+  textEl.textContent = msg;
+  toast.appendChild(iconEl);
+  toast.appendChild(textEl);
   container.appendChild(toast);
   setTimeout(() => { toast.style.opacity='0'; toast.style.transform='translateY(12px)'; setTimeout(()=>toast.remove(), 300); }, 2800);
 }
@@ -1636,17 +1885,16 @@ function openModal(id) {
   document.getElementById(id).classList.add('open');
   document.body.style.overflow = 'hidden';
 }
-function closeModal(id) {
-  document.getElementById(id).classList.remove('open');
-  document.body.style.overflow = '';
-}
 function closeModalOutside(e, id) {
   if (e.target.id === id) closeModal(id);
 }
-// Cerrar con tecla Escape
-document.addEventListener('keydown', e => {
+function closeModal(id) {
+  document.Id(id).classList.remove('open');
+  document.body.style.overflow = '';
+}
+document.addEventListener('keydown', function(e) {
   if (e.key === 'Escape') {
-    document.querySelectorAll('.legal-modal-overlay.open').forEach(m => {
+    document.querySelectorAll('.legal-modal-overlay.open').forEach(function(m) {
       m.classList.remove('open');
       document.body.style.overflow = '';
     });
